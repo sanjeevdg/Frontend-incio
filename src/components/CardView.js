@@ -44,14 +44,10 @@ function CardView() {
 
 return (
 <>
-<Grid sx={{position:'relative',top:-270,left:'11%',display:'flex',flexDirection:'row'}} item xs={10}>
-
-<Typography sx={{position:'relative',marginTop:8,marginLeft:10,fontSize:30,fontFamily:'AeonikBold'}}>Today</Typography>
-
-</Grid>
 
 
-<Grid sx={{position:'relative',top:-370,left:'10%',display:'flex',flexDirection:'row'}} item xs={10}>
+<Grid sx={{position:'absolute',top:40,left:140,display:'flex',flexDirection:'row'}} item xs={10}>
+
 
 <Typography sx={{position:'relative',marginTop:8,marginLeft:10,fontSize:30,fontFamily:'AeonikBold'}}>Today</Typography>
 

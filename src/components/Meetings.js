@@ -70,8 +70,8 @@ return (
 
 <Grid item xs={10} sx={{marginBottom:20,display:'flex',flexDirection:'row'}}>
 
-<Box sx={{position:'relative',width:'70%',height:70}}>
-<ButtonGroup variant="contained"  aria-label="outlined primary button group" sx={{height:28}}>
+<Box sx={{position:'absolute',zIndex:99,width:'70%',height:50}}>
+<ButtonGroup variant="contained"  aria-label="outlined primary button group" sx={{height:28,zIndex:99}}>
 <Button onClick={()=>{setCalendarView(false);setCardView(true);}}
 sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',outline:'none',backgroundColor:cardView?'black':'#AEAEB2',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>List view</Button>
 <Button onClick={()=>{setCalendarView(true);setCardView(false);}} sx={{'&:hover': {backgroundColor:'black'},backgroundColor:calendarView?'black':'#AEAEB2',textTransform:'none',border:'none',outline:'none',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>Calendar view</Button>
@@ -79,7 +79,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 </Box>
 
-<Box>
+<Box sx={{position:'absolute',left:'70%',height:50}}>
 <Button sx={{width:180,height:30,color:'white',textTransform:'none',backgroundColor:'#9249f4',display:'flex',marginLeft:'70%'}}>+ Create New Event</Button>
 </Box>
 

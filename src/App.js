@@ -17,6 +17,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Meetings from './components/Meetings';
 
+
 //import ListTerms from './components/dashboard/ListTerms';
 
 function App() {
@@ -30,7 +31,7 @@ useEffect(() => {
     auth.onAuthStateChanged(function (user) {
       if (user) {
         setUser(user);
-        navigate("/dashboard");
+      //  navigate("/dashboard");
       } else {
         setUser(null);
         navigate("/");
@@ -58,6 +59,7 @@ useEffect(() => {
        
        <Route path="/dashboard" element={<Dashboard />}/>
        <Route path="/meetings" element={<Meetings />}/>
+       
        </>
        :
        <> 

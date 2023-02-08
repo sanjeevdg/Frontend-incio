@@ -32,6 +32,8 @@ import { set, sub } from 'date-fns';
 
 import Header from './Header';
 import Sidebar from './Sidebar';
+import CardView from './CardView';
+import CalendarView from './CalendarView';
 
 
 
@@ -47,6 +49,12 @@ function Meetings() {
   
 let classes = useStyles();
 
+const [view, setView] = useState('calendar');
+
+
+const [calendarView, setCalendarView] = useState(false);
+
+const [cardView, setCardView] = useState(false);
 
 
 return (
@@ -60,12 +68,13 @@ return (
 
 <Sidebar />
 
-<Grid item xs={10} sx={{display:'flex',flexDirection:'row'}}>
+<Grid item xs={10} sx={{marginBottom:20,display:'flex',flexDirection:'row'}}>
 
 <Box sx={{position:'relative',width:'70%'}}>
-<ButtonGroup sx={{height:28}}>
-<Button sx={{textTransform:'none',border:'none',outline:'none',backgroundColor:'black',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>List view</Button>
-<Button sx={{textTransform:'none',border:'none',outline:'none',backgroundColor:'#AEAEB2',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>Calendar view</Button>
+<ButtonGroup variant="contained"  aria-label="outlined primary button group" sx={{height:28}}>
+<Button onClick={()=>{setCalendarView(false);setCardView(true);}}
+sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',outline:'none',backgroundColor:cardView?'black':'#AEAEB2',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>List view</Button>
+<Button onClick={()=>{setCalendarView(true);setCardView(false);}} sx={{'&:hover': {backgroundColor:'black'},backgroundColor:calendarView?'black':'#AEAEB2',textTransform:'none',border:'none',outline:'none',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>Calendar view</Button>
  </ButtonGroup>
 
 </Box>
@@ -77,286 +86,15 @@ return (
 </Grid>
 
 
-<Grid sx={{position:'relative',top:-300,left:'10%',display:'flex',flexDirection:'row'}} item xs={10}>
+{cardView?
+<CardView/>:<></>
 
-<Typography sx={{position:'relative',marginTop:8,marginLeft:10,fontSize:30,fontFamily:'AeonikBold'}}>Today</Typography>
+}
 
+{calendarView?
+<CalendarView/>:<></>
 
-<Grid sx={{marginTop:15,marginLeft:-10}} item xs={2}>
-<Paper elevation={0} sx={{
-height:250,width:250,borderRadius:0,backgroundColor:'#f2f2f2',
-"&:hover":{
-        backgroundColor:'black',
-        color:'white'
-    }
-
-
-}}>
-<br/>
-<Typography noWrap sx={{fontSize:18,fontFamily:'AeonikBold',ml:3}}>Budget Planning</Typography>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Time</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Fri, Feb 3, 2023 <br/> 5:30pm - 6:30pm CET</Typography>
-</Box>
-
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Place</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Zoom Call</Typography>
-</Box>
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row'}}>
-
-
-<Box sx={{width:70,marginBottom:1}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>People</Typography>
-</Box>
-<Box sx={{display:'flex',flexDirection:'row',marginLeft:3,marginTop:2,justifyContent:'center',alignItems:'center'}}>
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-&nbsp;
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;+2</Typography>
-</Box>
-
-</Box>
-
-
-<Box sx={{display:'flex', flexDirection:'row',alignItems:'center',marginTop:5,marginLeft:3}}>
-<LinkOutlined style={{width:14,height:14}}/>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;Copy Link</Typography>
-</Box>
-
-</Paper>
-</Grid>
-
-<Grid sx={{backgroundColor:'#f5f5f5',marginTop:15,marginLeft:10}} item xs={2}>
-
-
-<Paper elevation={0} sx={{
-height:250,width:250,borderRadius:0,backgroundColor:'#f2f2f2',
-"&:hover":{
-        backgroundColor:'black',
-        color:'white'
-    }
-
-
-}}>
-<br/>
-<Typography noWrap sx={{fontSize:18,fontFamily:'AeonikBold',ml:3}}>Budget Planning</Typography>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Time</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Fri, Feb 3, 2023 <br/> 5:30pm - 6:30pm CET</Typography>
-</Box>
-
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Place</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Zoom Call</Typography>
-</Box>
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row'}}>
-
-
-<Box sx={{width:70,marginBottom:1}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>People</Typography>
-</Box>
-<Box sx={{display:'flex',flexDirection:'row',marginLeft:3,marginTop:2,justifyContent:'center',alignItems:'center'}}>
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-&nbsp;
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;+2</Typography>
-</Box>
-
-</Box>
-
-
-<Box sx={{display:'flex', flexDirection:'row',alignItems:'center',marginTop:5,marginLeft:3}}>
-<EventNoteOutlined style={{width:14,height:14}}/>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;Copy Link</Typography>
-</Box>
-
-</Paper>
-
-
-</Grid>
-
-<Grid sx={{backgroundColor:'#f5f5f5',marginTop:15,marginLeft:10}} item xs={2}>
-
-
-<Paper elevation={0} sx={{
-height:250,width:250,borderRadius:0,backgroundColor:'#f2f2f2',
-"&:hover":{
-        backgroundColor:'black',
-        color:'white'
-    }
-
-
-}}>
-<br/>
-<Typography noWrap sx={{fontSize:18,fontFamily:'AeonikBold',ml:3}}>Budget Planning</Typography>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Time</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Fri, Feb 3, 2023 <br/> 5:30pm - 6:30pm CET</Typography>
-</Box>
-
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Place</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Zoom Call</Typography>
-</Box>
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row'}}>
-
-
-<Box sx={{width:70,marginBottom:1}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>People</Typography>
-</Box>
-<Box sx={{display:'flex',flexDirection:'row',marginLeft:3,marginTop:2,justifyContent:'center',alignItems:'center'}}>
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-&nbsp;
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;+2</Typography>
-</Box>
-
-</Box>
-
-
-<Box sx={{display:'flex', flexDirection:'row',alignItems:'center',marginTop:5,marginLeft:3}}>
-<EventNoteOutlined style={{width:14,height:14}}/>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;Copy Link</Typography>
-</Box>
-
-</Paper>
-
-
-</Grid>
-
-
-
-<Grid sx={{backgroundColor:'#f5f5f5',marginTop:15,marginLeft:10}} item xs={2}>
-
-
-<Paper elevation={0} sx={{
-height:250,width:250,borderRadius:0,backgroundColor:'#f2f2f2',
-"&:hover":{
-        backgroundColor:'black',
-        color:'white'
-    }
-}}>
-<br/>
-<Typography noWrap sx={{fontSize:18,fontFamily:'AeonikBold',ml:3}}>Budget Planning</Typography>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Time</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Fri, Feb 3, 2023 <br/> 5:30pm - 6:30pm CET</Typography>
-</Box>
-
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row',marginBottom:-1}}>
-
-
-<Box sx={{width:70}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Place</Typography>
-</Box>
-<Box>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>Zoom Call</Typography>
-</Box>
-
-</Box>
-
-<Box sx={{display:'flex',flexDirection:'row'}}>
-
-
-<Box sx={{width:70,marginBottom:1}}>
-<Typography sx={{color:'#8E8E9D',fontSize:13,fontFamily:'AeonikBold',ml:3,mt:2}}>People</Typography>
-</Box>
-<Box sx={{display:'flex',flexDirection:'row',marginLeft:3,marginTop:2,justifyContent:'center',alignItems:'center'}}>
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-&nbsp;
-<Avatar alt="Remy Sharp" sx={{width:20,height:20,borderRadius:10}} 
-src={require('../assets/images/avatar.png')} />
-
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;+2</Typography>
-</Box>
-
-</Box>
-
-
-<Box sx={{display:'flex', flexDirection:'row',alignItems:'center',marginTop:5,marginLeft:3}}>
-<EventNoteOutlined style={{width:14,height:14}}/>
-<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&nbsp;Copy Link</Typography>
-</Box>
-
-</Paper>
-
-
-</Grid>
-
-
-</Grid>
-
+}
 
 </Grid>
 

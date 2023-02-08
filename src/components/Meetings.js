@@ -70,7 +70,7 @@ return (
 
 <Grid item xs={10} sx={{marginBottom:20,display:'flex',flexDirection:'row'}}>
 
-<Box sx={{position:'relative',width:'70%'}}>
+<Box sx={{position:'relative',width:'70%',height:70}}>
 <ButtonGroup variant="contained"  aria-label="outlined primary button group" sx={{height:28}}>
 <Button onClick={()=>{setCalendarView(false);setCardView(true);}}
 sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',outline:'none',backgroundColor:cardView?'black':'#AEAEB2',color:'white',fontSize:13,fontFamily:'AeonikBold'}}>List view</Button>

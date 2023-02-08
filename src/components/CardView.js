@@ -46,7 +46,7 @@ return (
 <>
 
 
-<Grid sx={{position:'relative',top:-260,left:'10%',display:'flex',flexDirection:'row'}} item xs={10}>
+<Grid sx={{position:'relative',top:-250,left:'10%',display:'flex',flexDirection:'row'}} item xs={10}>
 
 <Typography sx={{position:'relative',marginTop:8,marginLeft:10,fontSize:30,fontFamily:'AeonikBold'}}>Today</Typography>
 

@@ -4,63 +4,39 @@ import PropTypes from 'prop-types';
 import { firebase, auth } from '../config/firebase-config';
 import {useNavigate} from 'react-router-dom';
 
-import Avatar from '@mui/material/Avatar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import Popover from '@mui/material/Popover';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Badge from '@mui/material/Badge';
-import Collapse from '@mui/material/Collapse';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
+import {Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
+        Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,
+        Badge,Collapse,Grid,LockOutlinedIcon,Typography  } from '@mui/material';
+
+import {ListItem,FormControl,ListSubheader,List,ListItemButton,ListItemIcon,ListItemText,ListItemAvatar}
+        from '@mui/material';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-//import Scrollbar from '@mui/material/Scrollbar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+import {InboxIcon,DraftsIcon,SendIcon,NotificationsNoneOutlined,Person2Outlined,
+        SettingsOutlined,PowerSettingsNewOutlined,DescriptionOutlined,
+        EventNoteOutlined,InsertInvitationOutlined,SourceOutlined,
+       PostAddOutlined,Done,CloseOutlined,CircleOutlined} from '@mui/icons-material';
 
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 
-import ListItem from '@mui/material/ListItem';
-import FormControl from '@mui/material/FormControl';
 
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
+import { withStyles, makeStyles } from "@mui/styles";
 
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-
-import InsertInvitationOutlinedIcon from '@mui/icons-material/InsertInvitationOutlined';
-import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
-import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined';
 
 //import { app } from '../config/firebase-config';
 import toast, { Toaster } from 'react-hot-toast';
 import { set, sub } from 'date-fns';
 
+const useStyles = makeStyles({
+  chipBorderRadius: {
+    borderRadius:0
+  }
+});
+
 
 function Header() {
 
+let classes = useStyles();
 
 let navigate = useNavigate();
 
@@ -108,7 +84,13 @@ const MENU_OPTIONS = [
   },
 ];
 
+ const handleChipClick = () => {
+    console.info('You clicked the Chip.');
+  };
 
+  const handleDelete = () => {
+    console.info('You clicked the delete icon.');
+  };
 
 
   return (
@@ -127,7 +109,7 @@ const MENU_OPTIONS = [
 <Box sx={{display:'flex',justifyContent:'flex-end',marginRight:4,marginTop:-3}}>
   <div ref={divRef2}>
       <IconButton aria-describedby={id2} color={open ? 'primary' : 'default'} onClick={handleClick2} sx={{ width: 40, height: 40 }}>
-<Badge badgeContent={3} color="error"><NotificationsNoneOutlinedIcon sx={{marginTop:0.5}}/></Badge>
+<Badge badgeContent={3} color="error"><NotificationsNoneOutlined sx={{marginTop:0.5}}/></Badge>
 </IconButton>
 <Popover
         id={id2}
@@ -141,7 +123,7 @@ const MENU_OPTIONS = [
             p: 0,
             mt: 1.5,
             ml: 0.75,
-            width: 180,
+            width: 280,
             '& .MuiMenuItem-root': {
               typography: 'body2',
               borderRadius: 0.75,
@@ -161,17 +143,36 @@ const MENU_OPTIONS = [
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
-              {option.label}
-            </MenuItem>
-          ))}
+          
+            <Box key="1" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
+             <CircleOutlined sx={{width:15,height:15,color:'#FF3B30'}}/>
+          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}>   &emsp;<b>Joe Blow</b> joined #team incio under
+             'Announcements' today 13th April 2023 under 'process'
+             </Typography>
+            </Box>
+          
+
+<Box key="1" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
+             <CircleOutlined sx={{width:15,height:15,color:'#FF3B30'}}/>
+          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}>   &emsp;<b>Payment</b> is being 
+          processed by incio Strategic Partners for 'Business Collaboration'
+             </Typography>
+            </Box>
+
         </Stack>
+
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
+
+           <Chip
+            className={classes.chipBorderRadius}
+        label="Custom delete icon"
+        onClick={handleChipClick}
+        onDelete={handleDelete}
+        deleteIcon={<Done />}
+      />
         </MenuItem>
       </Popover>
 </div>
@@ -205,13 +206,13 @@ src={require('../assets/images/avatar.png')} />
         <Stack sx={{ p: 1 }}>
           
             <MenuItem key='account' onClick={handleClose}>
-              <Person2OutlinedIcon sx={{marginLeft:-1}}/>&emsp;Account
+              <Person2Outlined sx={{marginLeft:-1}}/>&emsp;Account
             </MenuItem>
             <MenuItem key='settings' onClick={handleClose}>
-              <SettingsOutlinedIcon sx={{marginLeft:-1}}/>&emsp;Settings
+              <SettingsOutlined sx={{marginLeft:-1}}/>&emsp;Settings
             </MenuItem>
             <MenuItem key='logout' onClick={handleClose}>
-              <PowerSettingsNewOutlinedIcon sx={{marginLeft:-1}}/>&emsp;Logout
+              <PowerSettingsNewOutlined sx={{marginLeft:-1}}/>&emsp;Logout
             </MenuItem>
 
         </Stack>

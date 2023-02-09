@@ -54,7 +54,7 @@ const [view, setView] = useState('calendar');
 
 const [calendarView, setCalendarView] = useState(false);
 
-const [cardView, setCardView] = useState(false);
+const [cardView, setCardView] = useState(true);
 
 
 return (

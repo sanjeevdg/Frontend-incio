@@ -1,31 +1,19 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
-import { firebase, auth } from '../config/firebase-config';
+
 import {useNavigate} from 'react-router-dom';
 
-import {Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
-        Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,
-        Badge,Collapse,Grid,LockOutlinedIcon,Typography  } from '@mui/material';
-
-import {ListItem,FormControl,ListSubheader,List,ListItemButton,ListItemIcon,ListItemText,ListItemAvatar}
-        from '@mui/material';
-
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-import {InboxIcon,DraftsIcon,SendIcon,NotificationsNoneOutlined,Person2Outlined,
-        SettingsOutlined,PowerSettingsNewOutlined,DescriptionOutlined,
-        EventNoteOutlined,InsertInvitationOutlined,SourceOutlined,
-       PostAddOutlined,Done,CloseOutlined,CircleOutlined} from '@mui/icons-material';
+import {Chip,Avatar,IconButton,Divider,MenuItem,Popover, Stack,
+        Button,Box,Badge,Grid,Typography  } from '@mui/material';
 
 
+import {NotificationsNoneOutlined,Person2Outlined,
+        SettingsOutlined,PowerSettingsNewOutlined,Done,CircleOutlined} from '@mui/icons-material';
 
-import { withStyles, makeStyles } from "@mui/styles";
+import { firebase, auth } from '../config/firebase-config';
 
+import { makeStyles } from "@mui/styles";
 
-//import { app } from '../config/firebase-config';
-import toast, { Toaster } from 'react-hot-toast';
-import { set, sub } from 'date-fns';
 
 const useStyles = makeStyles({
   chipBorderRadius: {
@@ -69,20 +57,10 @@ const [anchorEl, setAnchorEl] = React.useState(null);
   const id2 = open2 ? "simple-popover" : undefined;
 
 
-const MENU_OPTIONS = [
-  {
-    label: 'Account',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
-];
+ const logout = () => {
+        auth.signOut();
+        navigate('/');
+    }
 
  const handleChipClick = () => {
     console.info('You clicked the Chip.');
@@ -211,7 +189,7 @@ src={require('../assets/images/avatar.png')} />
             <MenuItem key='settings' onClick={handleClose}>
               <SettingsOutlined sx={{marginLeft:-1}}/>&emsp;Settings
             </MenuItem>
-            <MenuItem key='logout' onClick={handleClose}>
+            <MenuItem key='logout' onClick={() => logout()}>
               <PowerSettingsNewOutlined sx={{marginLeft:-1}}/>&emsp;Logout
             </MenuItem>
 

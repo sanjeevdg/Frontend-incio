@@ -1,29 +1,10 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
-import { firebase, auth } from '../config/firebase-config';
-import {useNavigate} from 'react-router-dom';
-
-import {Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
-        Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,
-        Badge,Collapse,Grid,Typography  } from '@mui/material';
+import {Paper,Box,Grid,Typography  } from '@mui/material';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import {Table, TableBody, TableRow, TableCell,TableHead} from '@mui/material';
-
-import {ListItem,FormControl,ListSubheader,List,ListItemButton,ListItemIcon,ListItemText,ListItemAvatar}
-        from '@mui/material';
-
-import {LockOutlined,InboxIcon,DraftsIcon,SendIcon,NotificationsNoneOutlined,Person2Outlined,
-        SettingsOutlined,PowerSettingsNewOutlined,DescriptionOutlined,
-        EventNoteOutlined,InsertInvitationOutlined,SourceOutlined,
-       PostAddOutlined,Done,CloseOutlined,CircleOutlined,LinkOutlined} from '@mui/icons-material';
-
-//import { app } from '../config/firebase-config';
-import toast, { Toaster } from 'react-hot-toast';
-import { set, sub } from 'date-fns';
-import { withStyles, makeStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import Header from './Header';
 import Sidebar from './Sidebar';
 
@@ -71,53 +52,53 @@ return (
 
 
 
-<Grid sx={{marginLeft:28.5,backgroundColor:'#f2f2f2',marginRight:3}} item xs={2.5}>
+<Grid sx={{marginLeft:28.5,marginRight:3}} item xs={2.5}>
 
-<Table className={classes.table}>
-<TableBody>
-<TableRow>
-<TableCell>
-<Typography sx={{marginLeft:-5,marginTop:-1	,fontSize:50,fontFamily:'AeonikBold'}}>&emsp;12</Typography>
-</TableCell>
-<TableCell>
-<Typography noWrap sx={{marginTop:2,fontSize:15,fontFamily:'AeonikBold'}}>scheduled meetings</Typography>
-</TableCell>
-</TableRow>
+<Paper sx={{backgroundColor:'#f2f2f2',width:'100%',height:250}}>
+
+<Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+<Box sx={{marginTop:-5,marginLeft:2,width:80,height:50}}><Typography sx={{fontSize:60,fontFamily:'AeonikBold'}}>12</Typography>
+</Box>
+<Box sx={{width:190,height:50,marginTop:8}}>
+<Typography noWrap sx={{fontSize:15,fontFamily:'AeonikBold'}}>scheduled meetings</Typography>
+</Box>
+</Box>
 
 
-<TableRow>
-<TableCell className={classes.tableCell}>
-<Typography align="right" sx={{fontSize:15,fontFamily:'AeonikBold'}}>&emsp;2</Typography>
-</TableCell>
-<TableCell  className={classes.tableCell}>
+<Box sx={{display:'flex',flexDirection:'row',marginTop:3,marginBottom:-2}}>
+<Box sx={{width:50,height:30,marginLeft:4}}>
+<Typography align="right" sx={{fontSize:25,fontFamily:'AeonikBold'}}>2</Typography>
+</Box>
+<Box sx={{width:70,height:30,marginTop:1.5,marginLeft:2}}>
 <Typography align="left" sx={{fontSize:15,fontFamily:'AeonikBold'}}>invitations</Typography>
-</TableCell>
-</TableRow>
+</Box>
+</Box>
 
 
-<TableRow className={classes.tableRow}>
-<TableCell className={classes.tableCell}>
-<Typography align="right" sx={{fontSize:15,fontFamily:'AeonikBold'}}>&emsp;4</Typography>
-</TableCell>
-<TableCell className={classes.tableCell}>
+
+<Box sx={{display:'flex',flexDirection:'row',marginBottom:-2}}>
+<Box sx={{width:50,height:30,marginLeft:4}}>
+<Typography align="right" sx={{fontSize:25,fontFamily:'AeonikBold'}}>4</Typography>
+</Box>
+
+<Box sx={{width:190,height:30,marginTop:1.5,marginLeft:2}}>
 <Typography sx={{fontSize:15,fontFamily:'AeonikBold'}}>confirmed meetings</Typography>
-</TableCell>
-</TableRow>
+</Box>
+</Box>
 
 
-<TableRow className={classes.tableRow}>
-<TableCell className={classes.tableCell}>
-<Typography align="right" sx={{fontSize:15,fontFamily:'AeonikBold'}}>120</Typography>
-</TableCell>
-<TableCell className={classes.tableCell}>
+
+<Box sx={{display:'flex',flexDirection:'row'}}>
+<Box sx={{width:50,height:30,marginLeft:4}}>
+<Typography align="right" sx={{fontSize:25,fontFamily:'AeonikBold'}}>120</Typography>
+</Box>
+<Box sx={{width:190,height:30,marginTop:1,marginLeft:2}}>
 <Typography sx={{fontSize:15,fontFamily:'AeonikBold'}}>this week</Typography>
-</TableCell>
-</TableRow>
 
+</Box>
+</Box>
 
-</TableBody>
-
-</Table>
+</Paper>
 
 </Grid>
 

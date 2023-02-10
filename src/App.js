@@ -16,7 +16,8 @@ import {Toaster} from 'react-hot-toast';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Meetings from './components/Meetings';
-
+import Signup from './components/Signup';
+import Clients from './components/Clients';
 
 //import ListTerms from './components/dashboard/ListTerms';
 
@@ -31,10 +32,10 @@ useEffect(() => {
     auth.onAuthStateChanged(function (user) {
       if (user) {
         setUser(user);
-      //  navigate("/dashboard");
+        navigate("/dashboard");
       } else {
         setUser(null);
-        navigate("/");
+        navigate("/login");
       }
     });
   }, [auth]);
@@ -59,11 +60,13 @@ useEffect(() => {
        
        <Route path="/dashboard" element={<Dashboard />}/>
        <Route path="/meetings" element={<Meetings />}/>
+       <Route path="/clients" element={<Clients />}/>
        
        </>
        :
        <> 
-       <Route path="/" element={<Login />}/>
+       <Route path="/login" element={<Login />}/>
+       <Route path="/signup" element={<Signup />}/>
        
 
        </>

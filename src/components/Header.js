@@ -188,13 +188,13 @@ src={require('../assets/images/avatar.png')} />
         <Stack sx={{ p: 1 }}>
           
             <MenuItem key='account' sx={{fontSize:13,fontFamily:'AeonikBold'}} onClick={handleClose}>
-              <Person2Outlined sx={{marginLeft:-6}}/>&emsp;Account
+              <Person2Outlined sx={{marginLeft:-1}}/>&emsp;Account
             </MenuItem>
             <MenuItem key='settings' onClick={handleClose}>
-              <SettingsOutlined sx={{marginLeft:-6}}/>&emsp;Settings
+              <SettingsOutlined sx={{marginLeft:-1}}/>&emsp;Settings
             </MenuItem>
             <MenuItem key='logout' onClick={() => logout()}>
-              <PowerSettingsNewOutlined sx={{marginLeft:-7}}/>&emsp;Logout
+              <PowerSettingsNewOutlined sx={{marginLeft:-1}}/>&emsp;Logout
             </MenuItem>
 
         </Stack>

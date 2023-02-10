@@ -68,7 +68,7 @@ return (
       </ListItemButton>
       
 
-      <ListItemButton sx={{marginBottom:2}}>
+      <ListItemButton onClick={() => navigate('/clients')} sx={{marginBottom:2}}>
         
           <Person2Outlined />
         <Typography style={{fontSize:14,fontFamily:'AeonikBold',marginLeft:25}}>

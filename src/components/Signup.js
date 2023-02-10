@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { firebase, auth } from '../config/firebase-config';
 import {useNavigate} from 'react-router-dom';
 
-import {Avatar,Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,Grid}
+import {CircularProgress,Avatar,Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,Grid}
     from '@mui/material';
 
 import {LockOutlinedIcon,Visibility,VisibilityOff} from '@mui/icons-material';
@@ -45,6 +45,10 @@ let navigate = useNavigate();
 
 let fauth = getAuth();
 
+
+const [signupLoading,setSignupLoading] = useState(false);
+
+
 const notifysignup = () => toast.success('Signed Up successfully!');
 const notifylogin = () => toast.success('Logged in successfully!');
 
@@ -84,6 +88,7 @@ const emailError = emailValidator(email.value);
     const user = userCredential.user;
     alert(user);
     notifysignup();
+    setSignupLoading(false);
       navigate("/dashboard",'refresh');
     // ...
   })
@@ -184,12 +189,12 @@ return (
 </Box>
 <Box>
               <Button
-               onClick={() => signup()}
+               onClick={() => {setSignupLoading(true);signup();}}
                 type="submit"
                 variant="contained"
                 sx={{ mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
               >
-                Sign Up
+                Sign Up{ signupLoading && <CircularProgress color="info"/> }
               </Button></Box>
      </Box>         
 

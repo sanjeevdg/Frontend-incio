@@ -36,7 +36,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 
-import {requiredValidator} from '../utils/requiredValidator';
+import {requiredValidator} from '../utils/validators';
 import Header from './Header';
 import Sidebar from './Sidebar';
 

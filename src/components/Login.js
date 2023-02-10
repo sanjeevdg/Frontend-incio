@@ -20,7 +20,7 @@ import PhoneInput from 'react-phone-input-2'
 //import { app } from '../config/firebase-config';
 import toast, { Toaster } from 'react-hot-toast';
 
-import {GoogleAuthProvider, FacebookAuthProvider, signInWithPopup} from 'firebase/auth';
+import {getAuth, signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup} from 'firebase/auth';
 
 function Copyright(props) {
   return (
@@ -45,6 +45,41 @@ const [mynumber, setnumber] = useState("");
   const [otp, setotp] = useState('');
   const [show, setshow] = useState(false);
   const [final, setfinal] = useState('');
+
+
+
+
+
+
+const loginusingemail = () => {
+
+
+/*
+const auth = getAuth();
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+
+*/
+}
+
+
+
+
+
+
+
+
+
+
+
 
 const signin = () => {
 
@@ -201,7 +236,7 @@ return (
                 <Box sx={{flexDirection:'row',display:'flex',justifyContent:'center'}}>
                   <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
                     Dont have an account? &nbsp;</Typography>
-                    <Typography sx={{color:'#9249f4',fontSize:13,fontFamily:'AeonikBold'}}>
+                    <Typography onClick={() => navigate('/signup')} sx={{color:'#9249f4',fontSize:13,fontFamily:'AeonikBold'}}>
                      Sign up for FREE.
                      </Typography>
                 

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 
-
 import {useNavigate} from 'react-router-dom';
 
 import {Chip,Avatar,IconButton,Divider,MenuItem,Popover, Stack,
         Button,Box,Badge,Grid,Typography  } from '@mui/material';
 
 
-import {NotificationsNoneOutlined,Person2Outlined,
+import {Close,Circle,NotificationsNoneOutlined,Person2Outlined,
         SettingsOutlined,PowerSettingsNewOutlined,Done,CircleOutlined} from '@mui/icons-material';
 
 import { firebase, auth } from '../config/firebase-config';
 
 import { makeStyles } from "@mui/styles";
-
+import { getAuth, signOut } from "firebase/auth";
 
 const useStyles = makeStyles({
   chipBorderRadius: {
@@ -25,7 +24,7 @@ const useStyles = makeStyles({
 function Header() {
 
 let classes = useStyles();
-
+const auth = getAuth();
 let navigate = useNavigate();
 
 const [anchorEl, setAnchorEl] = React.useState(null);
@@ -58,8 +57,8 @@ const [anchorEl, setAnchorEl] = React.useState(null);
 
 
  const logout = () => {
-        auth.signOut();
-        navigate('/');
+        signOut(auth).then(() => { navigate('/') }).catch((e)=> { console.log(e+'signout err')  })
+        
     }
 
  const handleChipClick = () => {
@@ -109,33 +108,37 @@ const [anchorEl, setAnchorEl] = React.useState(null);
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            Welcome,..
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {'email,phone here'}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
+       <Stack sx={{ p: 1 }}>
           
             <Box key="1" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
-             <CircleOutlined sx={{width:15,height:15,color:'#FF3B30'}}/>
-          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}>   &emsp;<b>Joe Blow</b> joined #team incio under
-             'Announcements' today 13th April 2023 under 'process'
+             <Box sx={{marginRight:0.5}}> 
+             <IconButton><Circle sx={{width:15,height:15,color:'#FF3B30'}}/></IconButton></Box>
+             <Box>
+          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}><b>Joe Blow</b> joined #team incio under
+             'Announcements' today 
              </Typography>
-            </Box>
+            </Box></Box>
           
-
-<Box key="1" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
-             <CircleOutlined sx={{width:15,height:15,color:'#FF3B30'}}/>
-          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}>   &emsp;<b>Payment</b> is being 
-          processed by incio Strategic Partners for 'Business Collaboration'
+<Box>&nbsp;</Box>
+<Box key="2" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
+             <Box sx={{marginRight:0.5}}><IconButton><Circle sx={{width:15,height:15,color:'#FF3B30'}}/></IconButton></Box>
+<Box>          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}><b>Payment</b> is being 
+          processed by incio Strategic Partners'
              </Typography>
-            </Box>
+            </Box></Box>
+
+
+<Box>&nbsp;</Box>
+<Box key="3" style={{whiteSpace: 'normal',display:'flex',flexDirection:'row'}} onClick={handleClose}>
+             <Box sx={{marginRight:0.5}}><IconButton><Circle sx={{width:15,height:15,color:'#FF3B30'}}/></IconButton></Box>
+<Box>          <Typography sx={{fontSize:12,fontFamily:'AeonikRegular'}}><b>Payment</b> is being 
+          processed by incio Strategic Partners'
+             </Typography>
+            </Box></Box>
+
+
+
+
 
         </Stack>
 
@@ -147,9 +150,10 @@ const [anchorEl, setAnchorEl] = React.useState(null);
            <Chip
             className={classes.chipBorderRadius}
         label="Custom delete icon"
+        sx={{borderRadius:0,width:'100%'}}
         onClick={handleChipClick}
         onDelete={handleDelete}
-        deleteIcon={<Done />}
+        deleteIcon={<Close sx={{marginLeft:'80%'}}/>}
       />
         </MenuItem>
       </Popover>
@@ -183,14 +187,14 @@ src={require('../assets/images/avatar.png')} />
        
         <Stack sx={{ p: 1 }}>
           
-            <MenuItem key='account' onClick={handleClose}>
-              <Person2Outlined sx={{marginLeft:-1}}/>&emsp;Account
+            <MenuItem key='account' sx={{fontSize:13,fontFamily:'AeonikBold'}} onClick={handleClose}>
+              <Person2Outlined sx={{marginLeft:-6}}/>&emsp;Account
             </MenuItem>
             <MenuItem key='settings' onClick={handleClose}>
-              <SettingsOutlined sx={{marginLeft:-1}}/>&emsp;Settings
+              <SettingsOutlined sx={{marginLeft:-6}}/>&emsp;Settings
             </MenuItem>
             <MenuItem key='logout' onClick={() => logout()}>
-              <PowerSettingsNewOutlined sx={{marginLeft:-1}}/>&emsp;Logout
+              <PowerSettingsNewOutlined sx={{marginLeft:-7}}/>&emsp;Logout
             </MenuItem>
 
         </Stack>

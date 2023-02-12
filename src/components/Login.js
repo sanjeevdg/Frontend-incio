@@ -3,16 +3,20 @@ import React, { useState } from 'react';
 import { firebase, auth } from '../config/firebase-config';
 import {useNavigate} from 'react-router-dom';
 
-import {Avatar,Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,Grid}
+import {CircularProgress,Avatar,Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,Grid}
     from '@mui/material';
 
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { FacebookLoginButton } from "react-social-login-buttons";
 import { GoogleLoginButton } from "react-social-login-buttons";
+
+import {LockOutlinedIcon,Visibility,VisibilityOff} from '@mui/icons-material';
+
+
+import {InputBase,FormControl,InputLabel,FilledInput,InputAdornment,IconButton} from '@mui/material';
 
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput from 'react-phone-input-2'
@@ -39,6 +43,8 @@ function Login() {
 
 let navigate = useNavigate();
 
+let fauth = getAuth();
+
 const notifylogin = () => toast.success('Logged in successfully!');
 
 const [mynumber, setnumber] = useState("");
@@ -47,19 +53,30 @@ const [mynumber, setnumber] = useState("");
   const [final, setfinal] = useState('');
 
 
+const [email, setEmail] = useState({value:'',error:''});
+const [password,setPassword] = useState({value:'',error:''});
+
+const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+ const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+const [loginLoading,setLoginLoading] = useState(false);
 
 
+const signIn = () => {
 
 
-const loginusingemail = () => {
-
-
-/*
-const auth = getAuth();
-signInWithEmailAndPassword(auth, email, password)
+signInWithEmailAndPassword(fauth, email.value, password.value)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+//alert('user'+JSON.stringify(user))
+notifylogin();
+  navigate('/dashboard');
+
     // ...
   })
   .catch((error) => {
@@ -67,7 +84,6 @@ signInWithEmailAndPassword(auth, email, password)
     const errorMessage = error.message;
   });
 
-*/
 }
 
 
@@ -200,7 +216,7 @@ return (
                onClick={() => signin()}
                 type="submit"
                 variant="contained"
-                sx={{ mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
+                sx={{"&:hover":{backgroundColor:'#000'},textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
               >
                 Get OTP
               </Button></Box>:<></>}
@@ -216,7 +232,7 @@ return (
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 1, mb: 1 }}
+                sx={{ mt: 1, mb: 1,textTransform:'none' }}
               >
                 Verify OTP
               </Button></Box>:<></>}
@@ -224,7 +240,68 @@ return (
               
               
               <Box elevation={1} sx={{width:330,p:2,m:1,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',flexDirection:'column'}}>
-          <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:-10,marginBottom:10}}>or</Typography>
+          <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:-10,marginBottom:10}}>or Login using ..</Typography>
+
+<Box sx={{width:'100%',backgroundColor:'#fff',width:330}}>
+
+
+<Box sx={{width:'100%'}}>
+              <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Email</Typography>
+             <InputBase
+                required
+                sx={{height:40,width:'100%' ,color:'black', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
+                size="small"
+                type="email"
+                value={email.value}
+                fullWidth                
+                onChange={(e) => { setEmail({value:e.target.value,error:''}) }}                              
+              /> <span color="red">{(email.error)}</span>
+</Box>
+<Box sx={{marginTop:3}}>
+           <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Password</Typography>
+          <InputBase
+            id="filled-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            fullWidth
+            onChange={(e) => { setPassword({value:e.target.value,error:''}) }}
+            sx={{height:40,width:'100%', color:'black',backgroundColor:'#f2f2f2', fontSize:14,fontFamily:'AeonikBold'}}
+            size="small"
+            value={password.value}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  sx={{marginLeft:-1}}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>&nbsp;&nbsp;
+              </InputAdornment>
+            }
+          />
+</Box>
+
+<Box>
+              <Button
+               onClick={() => {setLoginLoading(true);signIn();}}
+                type="submit"
+                variant="contained"
+                sx={{"&:hover":{backgroundColor:'#000'},width:'60%',textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
+              >
+              Log In{ loginLoading && <CircularProgress size="small" color="info"/> }
+              </Button></Box>
+
+</Box>
+
+          <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:10,marginBottom:10}}>or ..</Typography>
+
+
 <Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/google-login.png')} style={{width:350}}/></Box>
 <Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/apple-login.png')} style={{width:350}} /> </Box>
 <Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/linkedin-login.png')} style={{width:350}} /> </Box>
@@ -233,13 +310,15 @@ return (
 
               </Box>
               
-                <Box sx={{flexDirection:'row',display:'flex',justifyContent:'center'}}>
+                <Box sx={{zIndex:99,flexDirection:'row',display:'flex',justifyContent:'center'}}>
                   <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
                     Dont have an account? &nbsp;</Typography>
-                    <Typography onClick={() => navigate('/signup')} sx={{color:'#9249f4',fontSize:13,fontFamily:'AeonikBold'}}>
+                    
+                    <Button sx={{"&:hover":{color:'#fff',backgroundColor:'#000'},color:'#9249f4',marginTop:-1,textTransform:'none'}}>
+                    <Typography onClick={() => navigate('/signup')} sx={{fontSize:13,fontFamily:'AeonikBold'}}>
                      Sign up for FREE.
                      </Typography>
-                
+                </Button>
                   
                 </Box>
                 

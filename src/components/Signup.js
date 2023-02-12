@@ -79,7 +79,7 @@ const emailError = emailValidator(email.value);
       return false;
     }
 
-
+// check for email before creating account
 
 
   createUserWithEmailAndPassword(fauth, email.value, password.value)
@@ -157,6 +157,7 @@ return (
                 sx={{height:40,width:'100%' ,color:'black', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
                 size="small"
                 type="email"
+                value={email.value}
                 fullWidth                
                 onChange={(e) => { setEmail({value:e.target.value,error:''}) }}                              
               /> <span color="red">{(email.error)}</span>
@@ -169,9 +170,10 @@ return (
             id="filled-adornment-password"
             type={showPassword ? 'text' : 'password'}
             fullWidth
-            onChange={(e) => { setPassword(e.target.value) }}
+            onChange={(e) => { setPassword({value:e.target.value,error:''}) }}
             sx={{height:40,width:'100%', color:'black',backgroundColor:'#f2f2f2', fontSize:14,fontFamily:'AeonikBold'}}
             size="small"
+            value={password.value}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -192,9 +194,9 @@ return (
                onClick={() => {setSignupLoading(true);signup();}}
                 type="submit"
                 variant="contained"
-                sx={{ mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
+                sx={{"&:hover":{backgroundColor:'#000'},textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
               >
-                Sign Up{ signupLoading && <CircularProgress color="info"/> }
+                Sign Up{ signupLoading && <CircularProgress size="small" color="info"/> }
               </Button></Box>
      </Box>         
 

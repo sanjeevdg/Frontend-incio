@@ -31,6 +31,13 @@ import toast, { Toaster } from 'react-hot-toast';
 import { set, sub } from 'date-fns';
 
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
+
+
+
 import {requiredValidator,emailValidator} from '../utils/validators';
 
 import Header from './Header';
@@ -52,31 +59,26 @@ const useStyles = makeStyles({
 
   selectbox: {
 
-    borderRadius:0,border:0,outline:'none',
+    borderRadius:0,backgroundColor:'#f2f2f2',border:0,outline:'none',
 
-  }
+  },
+
+  dttmp: {
+
+    border:0,backgroundColor:'#f2f2f2',outline:'none',width:'100%'
+  },
+  input: {height:23}
 
 });
-const clientstyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 940,
-  height:600,
-  bgcolor: "background.paper",
-  borderRadius:0,
-  boxShadow: 15,
-  p: 4,
-};
+
 
 const eventstyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 940,
-  height:600,
+  width: 870,
+  height:520,
   bgcolor: "background.paper",
   borderRadius:0,
   boxShadow: 15,
@@ -121,6 +123,9 @@ const [phone, setPhone] = useState({value:'',error:''});
 const [zip, setZip] = useState({value:'',error:''});
 const [country, setCountry] = useState({value:'',error:''});
 
+
+const [mstart,setMStart] = useState({value:'',error:''});
+
 const [repeat,setRepeat] = useState('');
 
 
@@ -131,7 +136,7 @@ const [repeat,setRepeat] = useState('');
 
 return (
 
-
+<LocalizationProvider dateAdapter={AdapterDayjs}>
 <Grid container>
 
 
@@ -153,7 +158,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 <Box sx={{position:'absolute',zIndex:99,flexDirection:'row',left:'70%',height:50}}>
 
-<Button onClick={() => handleOpenEventModal()} sx={{width:180,height:30,color:'white',textTransform:'none',backgroundColor:'#9249f4',display:'flex',marginLeft:'70%'}}>+ Create New Event</Button>
+<Button onClick={() => handleOpenEventModal()} sx={{'&:hover': {backgroundColor:'black'},width:180,height:30,color:'white',textTransform:'none',backgroundColor:'#AEAEB2',display:'flex',marginLeft:'70%'}}>+ Create New Event</Button>
 </Box>
 
 </Grid>
@@ -198,7 +203,10 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                   }}
                 >                
                   Create New Event
-                </Typography><Box sx={{width:'35%', justifyContent:'flex-end',alignItems:'flex-end'}}></Box><Box sx={{width:'12%', justifyContent:'flex-end',alignItems:'flex-end',alignSelf:'flex-end'}}>
+                </Typography>
+
+        <Box sx={{width:'35%'}}></Box>
+  <Box sx={{position:'absolute',left:'95%',top:42}}>
                 <CloseOutlined
                   onClick={() => {handleCloseEventModal();}}
                   sx={{ fontSize: 20}}
@@ -207,7 +215,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 <Grid item xs={12} sx={{display:'flex',flexDirection:'row'}}>
 
-<Grid item xs={4} sx={{marginRight:3}}>
+<Grid item xs={4} sx={{marginRight:3,marginTop:1}}>
 
 <Box sx={{position:'relative'}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
@@ -222,7 +230,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
               /> <span style={{color:"#FF3B30"}}>{(name.error)}</span>
 </Box>
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{position:'relative',marginTop:3}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -238,7 +246,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
               /> <span style={{color:"#FF3B30"}}>{(email.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{position:'relative',marginTop:3}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -257,7 +265,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 </Box>
 
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{position:'relative',marginTop:3}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -278,13 +286,27 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 
 
-<Grid item xs={4} sx={{marginRight:3}}>
+<Grid item xs={4} sx={{marginRight:3,marginTop:1}}>
 
 
+<Box sx={{position:'relative'}}>
+
+ <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Start Date/Time</Typography>
+
+               <DateTimePicker className={classes.dttmp}
+        renderInput={(props) => <TextField size="small" {...props} />}
+        style={{height:23}}
+        value={mstart}
+        onChange={(newValue) => {
+          setMStart(newValue);
+        }}
+      />
+</Box>
 
 
-
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{position:'relative',marginTop:3}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -293,6 +315,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
           open={open}
+          size="small"
           className={classes.selectbox}
           sx={{height:40,width:'100%'}}
           onClose={handleClose}
@@ -311,62 +334,72 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 
 
-<Box sx={{position:'relative',marginTop:1}}>
- <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
-              Repeat on</Typography>
+<Box sx={{position:'relative',marginTop:3,display:'flex',alignItems:'center'}}>
+ <Box sx={{width:'100%',marginTop:-8,marginBottom:1}}><Typography noWrap sx={{fontSize:13,color:'#000',fontFamily:'AeonikBold'}}>
+              Repeat on<br/></Typography></Box>
+              <Box sx={{display:'flex',alignItems:'center', marginBottom:-1,marginLeft:-33,marginTop:-4,flexDirection:'row'}}>
              <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Mon
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>MON</Typography>
 
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Tue
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>TUE</Typography>
 
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Wed
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>WED</Typography>
 
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Thu
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>THU</Typography>
+              </Box>
+              <Box sx={{display:'flex',position:'relative',marginTop:5,marginLeft:-25,flexDirection:'row'}}>
+              <Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Fri
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>FRI</Typography>
+              </Box>&nbsp;&nbsp;&nbsp;<Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Sat
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SAT</Typography>
+         </Box><Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>     
 <Checkbox
                 required
-                sx={{height:35,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
+                sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
                 value={repeat}
                 onChange={(e) => { setRepeat({value:e.target.value,error:''}) }}                              
-              />Sun
+              /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SUN
+              </Typography>
+              </Box>
+              </Box>
                <span style={{color:"#FF3B30"}}>{(name.error)}</span>
+
 </Box>
 
 
@@ -383,7 +416,89 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 <Grid item xs={4}>
 
 
+<Box sx={{position:'relative',marginTop:1}}>
+ <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+              People</Typography>
+             <InputBase
+                required
+                sx={{height:35,width:'100%' ,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
+                size="small"
+                type="text"
+                fullWidth                
+                value={name.value}
+                onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
+              /> <span style={{color:"#FF3B30"}}>{(name.error)}</span>
+</Box>
 
+
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <ListItem alignItems="center"
+         secondaryAction={
+              <IconButton edge="end" aria-label="comments">
+        <CloseOutlined
+                  onClick={() => {handleCloseEventModal();}}
+                  sx={{ fontSize: 20}}
+                />
+              </IconButton>
+            }
+      >
+        <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src={require('../assets/images/avatar.png')} />
+        </ListItemAvatar>
+        <ListItemText>
+        <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+          Leo Sayer          </Typography>
+        </ListItemText>
+        
+      </ListItem>
+
+<ListItem  sx={{marginTop:-1}} alignItems="center"
+         secondaryAction={
+              <IconButton edge="end" aria-label="comments">
+        <CloseOutlined
+                  onClick={() => {handleCloseEventModal();}}
+                  sx={{ fontSize: 20}}
+                />
+              </IconButton>
+            }
+      >
+        <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src={require('../assets/images/avatar.png')} />
+        </ListItemAvatar>
+        <ListItemText>
+        <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+          Montgomery Clifton          </Typography>
+        </ListItemText>
+        
+      </ListItem>
+
+
+      <ListItem sx={{marginTop:-1}} alignItems="center"
+         secondaryAction={
+              <IconButton edge="end" aria-label="comments">
+        <CloseOutlined
+                  onClick={() => {handleCloseEventModal();}}
+                  sx={{ fontSize: 20}}
+                />
+              </IconButton>
+            }
+      >
+        <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src={require('../assets/images/avatar.png')} />
+        </ListItemAvatar>
+        <ListItemText>
+        <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+          Steve Blanchett          </Typography>
+        </ListItemText>
+        
+      </ListItem>
+
+
+
+
+
+
+</List>
 
 
 
@@ -409,10 +524,11 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                   }}
                   style={{
                     width: 150,
-                    height: 35,
+                    height: 30,
                     borderRadius: 6,
                     alignSelf: "center",
                     color: "white",
+                    backgroundColor:"#AEAEB2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
                     textTransform: "none",                   
@@ -437,7 +553,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 
 </Grid>
-
+</LocalizationProvider>
 
 
 	);

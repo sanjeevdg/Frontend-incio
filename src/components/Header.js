@@ -57,7 +57,7 @@ const [anchorEl, setAnchorEl] = React.useState(null);
 
 
  const logout = () => {
-        signOut(auth).then(() => { navigate('/') }).catch((e)=> { console.log(e+'signout err')  })
+        signOut(auth).then(() => { navigate('/login') }).catch((e)=> { console.log(e+'signout err')  })
         
     }
 

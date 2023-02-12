@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import { firebase, auth } from '../config/firebase-config';
@@ -28,6 +28,7 @@ import {LockOutlined,InboxIcon,DraftsIcon,SendIcon,NotificationsNoneOutlined,Per
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
+import ModalUnstyled from '@mui/base/ModalUnstyled';
 //import { app } from '../config/firebase-config';
 import toast, { Toaster } from 'react-hot-toast';
 import { set, sub } from 'date-fns';
@@ -43,22 +44,32 @@ import CalendarView from './CalendarView';
 
 
 const useStyles = makeStyles({
-
+// 
   button: {
     backgroundColor: '#AEAEB2',
     color: '#fff',
     '&:hover': {
-      backgroundColor: '#9249F4',
+      backgroundColor: '#000',
       color: '#fff',
   },},
 
   selectbox: {
 
-    borderRadius:0,border:0,outline:'none',
+    borderRadius:0,backgroundColor:'#AEAEB2',border:0,outline:'none',
 
   }
 
 });
+const StyledButton = withStyles({
+  root: {
+    backgroundColor: '#AEAEB2',
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#000',
+      color: '#fff',
+  },
+}})(Button);
+
 const clientstyle = {
   position: "absolute",
   top: "50%",
@@ -69,72 +80,17 @@ const clientstyle = {
   bgcolor: "background.paper",
   borderRadius:0,
   boxShadow: 15,
-  p: 4,
+  p: 4,  
 };
-
-const eventstyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 940,
-  height:600,
-  bgcolor: "background.paper",
-  borderRadius:0,
-  boxShadow: 15,
-  p: 4,
-};
-
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
 
 function Clients() {
 
+
+let navigate = useNavigate();
+
 let classes = useStyles();
 
-const [clientsLoading, setClientsLoading] = useState(true);
+
 
 const [openClientModal, setOpenClientModal] = useState(false);
 const handleOpenClientModal = () => setOpenClientModal(true);
@@ -152,6 +108,13 @@ const [hoveredRow, setHoveredRow] = useState(null);
     setHoveredRow(null);
   };
 
+const notifyclientadd = () => toast.success('Client Added successfully!');
+   const notifyeditclientsuccess = () => toast.success("Client has been edited in database!");
+
+
+const [myclients, setMyClients] = useState([]);
+const [clientsLoading, setClientsLoading] = useState(false);
+
 
 const [name, setName] = useState({value:'',error:''});
 const [email, setEmail] = useState({value:'',error:''});
@@ -168,21 +131,32 @@ const [czip, setCZip] = useState({value:'',error:''});
 const [ccountry, setCCountry] = useState({value:'',error:''});
 
 
+const [clientId, setClientId] = useState(0);
+const [editClientMode, setEditClientMode] = useState(false);
 
-
-/*
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
   {
-    field: 'term',
-    headerName: 'Term name',
-    width: 250,
+    field: 'name',
+    headerName: 'Name',
+    width: 170,
     editable: true,
   },
   {
-    field: 'termdesc',
-    headerName: 'Description',
+    field: 'cname',
+    headerName: 'Company Name',
+    width: 210,
+    editable: true,
+  },
+  {
+    field: 'email',
+    headerName: 'Email Address',
     width: 300,
+    editable: true,
+  },
+  {
+    field: 'phone',
+    headerName: 'Phone',
+    width: 140,
     editable: true,
   },
   {
@@ -216,18 +190,26 @@ const columns: GridColDef[] = [
   }
 }
 ];
-*/
+
 
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
+  const [countryopen, setCountryOpen] = React.useState(false);
+  const handleCountryClose = () => {
+    setCountryOpen(false);
+  };
+  const handleCountryOpen = () => {
+    setCountryOpen(true);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const [ccountryopen, setCCountryOpen] = React.useState(false);
+  const handleCCountryClose = () => {
+    setCCountryOpen(false);
   };
+  const handleCCountryOpen = () => {
+    setCCountryOpen(true);
+  };
+
+
 
   const handleOpenEditModal = () => setEditModalOpen(true);
   const handleCloseEditModal = () => {
@@ -235,24 +217,136 @@ const columns: GridColDef[] = [
   };
 
 
+useEffect(() => {
+
+// localhost:5000
+try{
+  fetch('https://backend-incio.onrender.com/getClientsList', {
+
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      }   
+}).then((resp) => {
+  resp.json().then((data) => {
+  let adata = data;
+  setMyClients(adata.myclients);
+  setClientsLoading(true);
+console.log('adata=',adata);
+     });
+});
+} catch(e) { console.log('caught err'+e.message); }
+
+
+
+
+
+
+
+
+}, []);
+
+
+
+
 async function createClient() {
 
 
-alert('cal');
-
 const nameError = requiredValidator(name.value);
 const emailError = emailValidator(email.value);
+const phoneError = requiredValidator(phone.value);
+const addressError = requiredValidator(address.value);
+const zipError = requiredValidator(zip.value);
+const countryError = requiredValidator(country.value);
 
-   if (nameError || emailError) {
+const cnameError = requiredValidator(cname.value);
+const cemailError = emailValidator(cemail.value);
+const cphoneError = requiredValidator(cphone.value);
+const caddressError = requiredValidator(caddress.value);
+const czipError = requiredValidator(czip.value);
+const ccountryError = requiredValidator(ccountry.value);
+
+   if (nameError || emailError || phoneError || addressError || zipError || countryError || 
+    cnameError || cemailError || cphoneError || caddressError || czipError || ccountryError ) {
       setName({ ...name, error: nameError });
       setEmail({ ...email, error: emailError });
+      setAddress({...address,error:addressError});
+      setPhone({...phone,error:phoneError});
+      setZip({...zip,error:zipError});
+      setCountry({...country,error:countryError});
+
+      setCName({ ...cname, error: cnameError });
+      setCEmail({ ...cemail, error: cemailError });
+      setCAddress({...caddress,error:caddressError});
+      setCPhone({...cphone,error:cphoneError});
+      setCZip({...czip,error:czipError});
+      setCCountry({...ccountry,error:ccountryError});
+
     //  setTermAdding(false);
       return false;
     }
 
+const body = {
+   "name": name.value, 
+   "email": email.value, 
+   "phone": phone.value,
+   "address": address.value,
+   "zip": zip.value,
+   "country": country.value,
+   "cname": cname.value, 
+   "cemail": cemail.value, 
+   "cphone": cphone.value,
+   "caddress": caddress.value,
+   "czip": czip.value,
+   "ccountry": ccountry.value
+};
+
+console.log('body==',body);
+
+var formBody = [];
+for (var key in body) {
+   var encodedKey = encodeURIComponent(key);
+   var encodedValue = encodeURIComponent(body[key]);
+   formBody.push(encodedKey + '=' + encodedValue);
+}
+formBody = formBody.join('&');
+// curl -d "formname=test1&displayname=est1" -X POST https://710d-2409-4060-1e-b158-1d34-fc03-ff6d-1ef2.ngrok.io/createNewForm
+
+// backend-incio.onrender.com
+
+try{
+  fetch(`https://backend-incio.onrender.com/addNewClient`, {
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      },  
+   body: formBody,
+}).then((resp) => {
+  resp.json().then((data) => {
+   // setIsLoading(false);
+   //alert(JSON.stringify(data));
+   notifyclientadd();
+   alert('returned data::'+JSON.stringify(data));
+   //setTermAdding(false);
+   setTimeout(() => { navigate(0);},1000);
+//alert('success');
+window.reload();
+    
+    }
+    )
+
+  
+
+})
+} catch(e) { alert('caught err'+e.message); }
+
 
 
 }
+
+
+
+
 
 const callDelete = (id) => {
 
@@ -265,15 +359,171 @@ const callDelete = (id) => {
 }
 
 
+function processEditClient() {
+
+
+const nameError = requiredValidator(name.value);
+const emailError = emailValidator(email.value);
+const phoneError = requiredValidator(phone.value);
+const addressError = requiredValidator(address.value);
+const zipError = requiredValidator(zip.value);
+const countryError = requiredValidator(country.value);
+
+const cnameError = requiredValidator(cname.value);
+const cemailError = emailValidator(cemail.value);
+const cphoneError = requiredValidator(cphone.value);
+const caddressError = requiredValidator(caddress.value);
+const czipError = requiredValidator(czip.value);
+const ccountryError = requiredValidator(ccountry.value);
+
+   if (nameError || emailError || phoneError || addressError || zipError || countryError || 
+    cnameError || cemailError || cphoneError || caddressError || czipError || ccountryError ) {
+      setName({ ...name, error: nameError });
+      setEmail({ ...email, error: emailError });
+      setAddress({...address,error:addressError});
+      setPhone({...phone,error:phoneError});
+      setZip({...zip,error:zipError});
+      setCountry({...country,error:countryError});
+
+      setCName({ ...cname, error: cnameError });
+      setCEmail({ ...cemail, error: cemailError });
+      setCAddress({...caddress,error:caddressError});
+      setCPhone({...cphone,error:cphoneError});
+      setCZip({...czip,error:czipError});
+      setCCountry({...ccountry,error:ccountryError});
+
+    //  setTermAdding(false);
+      return false;
+    }
+
+const body = {
+    "clientid":clientId,
+   "name": name.value, 
+   "email": email.value, 
+   "phone": phone.value,
+   "address": address.value,
+   "zip": zip.value,
+   "country": country.value,
+   "cname": cname.value, 
+   "cemail": cemail.value, 
+   "cphone": cphone.value,
+   "caddress": caddress.value,
+   "czip": czip.value,
+   "ccountry": ccountry.value
+};
 
 
 
-const editClient = (id) => {
+
+var formBody = [];
+for (var key in body) {
+   var encodedKey = encodeURIComponent(key);
+   var encodedValue = encodeURIComponent(body[key]);
+   formBody.push(encodedKey + '=' + encodedValue);
+}
+formBody = formBody.join('&');
+// curl -d "formname=test1&displayname=est1" -X POST https://710d-2409-4060-1e-b158-1d34-fc03-ff6d-1ef2.ngrok.io/createNewForm
+// mybtapp2-node-api.onrender.com
+try{
+  fetch(`https://backend-incio.onrender.com/editClient`, {
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      },  
+   body: formBody,
+}).then((resp) => {
+  resp.json().then((data) => {
+   // setIsLoading(false);
+   //alert(JSON.stringify(data));
+   notifyeditclientsuccess();
+   //setTermAdding2(false);
+   setTimeout(() => { navigate(0);},1000);
+//alert('success');
+window.reload();
+    
+    }
+    )
+
+  
+
+})
+} catch(e) { alert('caught err'+e.message); }
 
 
 
 
 }
+
+ const [profileimage, setProfileImage] = useState({ preview: '', data: '' })
+  // const [status, setStatus] = useState('')
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    let formData = new FormData()
+    formData.append('file', profileimage.data)
+    const response = await fetch('http://localhost:5000/uploadProfilePicture', {
+      method: 'POST',
+      body: formData,
+    })
+    if (response) alert(response.statusText)
+  }
+
+  const handleFileChange = (e) => {
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    }
+    setProfileImage(img)
+  }
+
+const editClient = (id) => {
+
+
+//alert('edit pressed on id='+id);
+
+alert('myid='+id);
+
+var myc = myclients.filter(function(obj){
+
+  return (obj.id===id);
+});
+
+console.log('mc==',myc[0]);
+
+
+
+
+setName({ value:myc[0].name, error: '' });
+      setEmail({value:myc[0].email, error: '' });
+      setAddress({value:myc[0].address,error:''});
+      setPhone({value:myc[0].phone,error:''});
+      setZip({value:myc[0].zip,error:''});
+      setCountry({value:myc[0].country,error:''});
+
+      setCName({ value:myc[0].cname, error: '' });
+      setCEmail({ value:myc[0].cemail, error: '' });
+      setCAddress({value:myc[0].caddress,error:''});
+      setCPhone({value:myc[0].cphone,error:''});
+      setCZip({value:myc[0].czip,error:''});
+      setCCountry({value:myc[0].ccountry,error:''});
+
+      setClientId(myc[0].id);
+
+
+
+handleOpenClientModal();
+
+
+setEditClientMode(true);
+
+
+
+//navigate('/edit-form',{state:{"termid":id}});
+
+
+}
+
+
+
 
 
 
@@ -300,7 +550,7 @@ return (
 </Box>
 
 <Box sx={{position:'absolute',zIndex:99,flexDirection:'row',left:'70%',height:50}}>
-<Button onClick={() => handleOpenClientModal()} sx={{width:180,height:30,color:'white',textTransform:'none',backgroundColor:'#9249f4',display:'flex'}}>+ Create New Client</Button>
+<Button onClick={() => handleOpenClientModal()} sx={{'&:hover': {backgroundColor:'black'},width:180,height:30,color:'white',textTransform:'none',backgroundColor:'#AEAEB2',display:'flex'}}>+ Create New Client</Button>
 </Box>
 
 </Grid>
@@ -321,6 +571,7 @@ return (
 
 {clientsLoading?
    <DataGrid
+   rowHeight={40}
    initialState={{ pinnedColumns: { right: ["actions"] } }}
    componentsProps={{
   row: {
@@ -328,11 +579,10 @@ return (
     onMouseLeave: onMouseLeaveRow
   }
 }}
-        rows={rows}
+        rows={myclients}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
-        checkboxSelection
         disableSelectionOnClick
    sx={{
     border:0,borderColor:'white',
@@ -350,18 +600,28 @@ return (
         padding: 0
       }
     },
+    "& .MuiDataGrid-row:hover": {
+    backgroundColor: "skyblue"
+    },
     "& .MuiDataGrid-row": {
       cursor: "pointer",
-      border:0,borderColor:'white',
+      border:1,borderColor:'white',
       "&:hover": {
-        backgroundColor: "whitesmoke"
+        backgroundColor: "#000"
       },
+
       "&:first-of-type": {
         borderTop: "1px solid rgba(224, 224, 224, 1)"
       }
     },
     "& .MuiDataGrid-cell:focus": {
       outline: "none"
+    },
+    "& .MuiDataGrid-cell": {
+      fontSize:11,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'
+    },
+    "& .MuiDataGrid-columnHeaderTitle": {
+      fontSize:12,fontFamily:'AeonikBold',height:50
     },
     "& .MuiDataGrid-cell:focus-within": {
       outline: "none"
@@ -396,6 +656,7 @@ return (
               <Box
                 sx={{ display: "flex",width:'100%',flexDirection:'row',height: 60 }}
               >
+               <Box sx={{width:'35%', justifyContent:'flex-end',alignItems:'flex-end'}}>
                 <Typography
                 noWrap
                   sx={{
@@ -404,11 +665,14 @@ return (
                     fontFamily: "AeonikBold",
                   }}
                 >                
-                  Create New Client
-                </Typography><Box sx={{width:'35%', justifyContent:'flex-end',alignItems:'flex-end'}}></Box><Box sx={{width:'12%', justifyContent:'flex-end',alignItems:'flex-end',alignSelf:'flex-end'}}>
+                 {editClientMode? "Edit Client" : "Create New Client"} 
+                </Typography>
+                </Box>
+                <Box sx={{width:'30%'}}></Box>
+                <Box sx={{width:'12%',position:"absolute", left:'69%',top:45}}>
                 <CloseOutlined
                   onClick={() => {handleCloseClientModal();}}
-                  sx={{ fontSize: 20}}
+                  sx={{marginLeft:30,marginTop:-20,justifyContent:'flex-end',alignSelf:'flex-end', fontSize: 20}}
                 />
               </Box></Box></Grid>
 
@@ -501,10 +765,10 @@ return (
            <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
-          open={open}
+          open={countryopen}
           sx={{height:40,width:'100%',borderRadius:0,border:0,outline:'none'}}
-          onClose={handleClose}
-          onOpen={handleOpen}
+          onClose={handleCountryClose}
+          onOpen={handleCountryOpen}
           value={country.value}
           onChange={(e) => { setCountry({value:e.target.value,error:''}) }}
         >
@@ -580,7 +844,7 @@ return (
                 type="text"
                 value={caddress.value}
                 fullWidth                
-                onChange={(e) => { setAddress({value:e.target.value,error:''}) }}                              
+                onChange={(e) => { setCAddress({value:e.target.value,error:''}) }}                              
               /> <span style={{color:"#FF3B30"}}>{(caddress.error)}</span>
 </Box>
 
@@ -608,10 +872,10 @@ return (
            <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
-          open={open}
+          open={ccountryopen}
           sx={{height:40,width:'100%',borderRadius:0,border:0,outline:'none'}}
-          onClose={handleClose}
-          onOpen={handleOpen}
+          onClose={handleCCountryClose}
+          onOpen={handleCCountryOpen}
           value={ccountry.value}
           onChange={(e) => { setCCountry({value:e.target.value,error:''}) }}
         >
@@ -630,75 +894,81 @@ return (
 
 <Grid item xs={4}>
 <Box sx={{display:'flex',position:'relative',width:'100%'}}>
+
 <Box sx={{display:'flex',height:20,width:200}}>
- <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+ <Typography noWrap sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Profile Photo</Typography>
  </Box>             
-      <Box sx={{display:'flex',marginTop:4,flexDirection:'row',alignItems:'center'}}> 
 
- <Avatar alt="Remy Sharp" sx={{width:80,height:80,borderRadius:40}} 
-src={require('../assets/images/avatar.png')} />
+ <Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>      
+<Box sx={{marginLeft:-10,marginTop:3}}>
+ <img alt="profile photo" style={{width:80,height:80,borderRadius:40}} 
+src={profileimage.preview? profileimage.preview:require('../assets/images/avatar.png')} />
 
-      <span color="red">{(email.error)}</span>
 
+      
+</Box>
 <Box> 
-&emsp;
-<Button className={classes.button}
-                  onClick={() => {                    
-                    
-                  }}
-                  style={{
+
+
+ 
+<form onSubmit={handleSubmit}>
+<input type='file' name='file' style={{color:'red'}} onChange={handleFileChange}></input>
+        <button  style={{
                     width: 140,
                     height: 30,
+                    marginLeft:15,
                     borderRadius: 6,
                     alignSelf: "flex-end",
                     color: "white",
+                    backgroundColor:"#AEAEB2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
                     textTransform: "none",                   
-                  }}
-                >
-                  Upload New
-                </Button>
+                  }} type='submit'>Upload</button>
+      </form>
+
 </Box>
 </Box>
 </Box>
 
 
 
-<Box sx={{display:'flex',position:'relative'}}>
+<Box sx={{display:'flex',position:'relative',marginTop:3}}>
 <Box sx={{display:'flex',width:200}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Company Logo</Typography>
  </Box>             
-      <Box sx={{display:'flex',marginTop:4,marginLeft:-4,flexDirection:'row',alignItems:'center'}}> 
+      <Box sx={{display:'flex',marginTop:2,flexDirection:'row',alignItems:'center'}}> 
 
- <Avatar alt="Remy Sharp" sx={{width:80,height:80,borderRadius:40}} 
+ <Avatar alt="Remy Sharp" sx={{marginLeft:-25,marginTop:1,width:80,height:80,borderRadius:40}} 
 src={require('../assets/images/avatar.png')} />
 
-      <span color="red">{(email.error)}</span>
+      
 
-<Box> 
-&emsp;&emsp;
-<Button className={classes.button}
+<Box sx={{"& .MuiButton-root":{"&:hover":{backgroundColor:'#000'}}}}> 
+
+<StyledButton
                   onClick={() => {                    
                     
                   }}
                   style={{
                     width: 140,
                     height: 30,
+                    marginLeft:15,
                     borderRadius: 6,
                     alignSelf: "flex-end",
                     color: "white",
+                    backgroundColor:"#AEAEB2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
-                    textTransform: "none",                   
+                    textTransform: "none",                                                       
                   }}
                 >
                   Upload New
-                </Button>
+                </StyledButton>
 </Box>
 </Box>
 </Box>
@@ -718,29 +988,33 @@ src={require('../assets/images/avatar.png')} />
               <Box
                 sx={{
                   display: "flex",
+                  zIndex:99,
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop:3
 
                 }}
               >
-                <Button className={classes.button}
+                <StyledButton
                   onClick={() => {                    
-                    createClient();
+                    editClientMode? processEditClient() : createClient()
                   }}
                   style={{
                     width: 150,
                     height: 35,
+                    zIndex:99,
                     borderRadius: 6,
                     alignSelf: "center",
                     color: "white",
+                    backgroundColor:"#AEAEB2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
-                    textTransform: "none",                   
+                    textTransform: "none",                                   
+                    "&:hover":{backgroundColor:'#000'}
                   }}
                 >
-                  Create Client
-                </Button>
+                  {editClientMode? "Edit Client": "Create Client"}
+                </StyledButton>
               </Box>
             </Paper>
           </Modal>

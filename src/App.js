@@ -52,20 +52,20 @@ useEffect(() => {
     
     <CssBaseline />
      
-    <Routes> 
+    <Routes path="/*"> 
       
 {user?
         
        <>
        
-       <Route path="/dashboard" element={<Dashboard />}/>
+       <Route index path="/dashboard" element={<Dashboard />}/>
        <Route path="/meetings" element={<Meetings />}/>
        <Route path="/clients" element={<Clients />}/>
        
        </>
        :
        <> 
-       <Route path="/login" element={<Login />}/>
+       <Route index path="/login" element={<Login />}/>
        <Route path="/signup" element={<Signup />}/>
        
 

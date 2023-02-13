@@ -1,7 +1,7 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useMemo } from 'react';
 
 import PropTypes from 'prop-types';
-import { firebase, auth } from '../config/firebase-config';
+import { firebase, auth,storage } from '../config/firebase-config';
 import {useNavigate} from 'react-router-dom';
 
 import {styled, withStyles, makeStyles } from "@mui/styles";
@@ -10,14 +10,14 @@ import {styled, withStyles, makeStyles } from "@mui/styles";
 
 import ButtonGroup from '@mui/material/ButtonGroup';
 
-import {CircularProgress,Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
+import {Fab,CircularProgress,Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
         Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,
         Badge,Collapse,Grid,Typography,Modal,InputBase  } from '@mui/material';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import {Select, ListItem,FormControl,ListSubheader,List,ListItemButton,ListItemIcon,ListItemText,ListItemAvatar}
+import {ListItem,FormControl,ListSubheader,List,ListItemButton,ListItemIcon,ListItemText,ListItemAvatar}
         from '@mui/material';
 
 import {LockOutlined,InboxIcon,DraftsIcon,SendIcon,NotificationsNoneOutlined,Person2Outlined,
@@ -33,6 +33,8 @@ import ModalUnstyled from '@mui/base/ModalUnstyled';
 import toast, { Toaster } from 'react-hot-toast';
 import { set, sub } from 'date-fns';
 
+import Select, { StylesConfig } from 'react-select';
+import countryList from 'react-select-country-list';
 
 import {requiredValidator,emailValidator} from '../utils/validators';
 
@@ -42,8 +44,16 @@ import CardView from './CardView';
 import CalendarView from './CalendarView';
 
 
+/*
+const useStyles = makeStyles(theme => ({
+  customHoverFocus: {
+    "&:hover, &.Mui-focusVisible": { backgroundColor: "#000" }
+  }
+}));
+*/
 
-const useStyles = makeStyles({
+//#AEAEB2
+const useStyles = makeStyles(theme => ({
 // 
   button: {
     backgroundColor: '#AEAEB2',
@@ -54,12 +64,76 @@ const useStyles = makeStyles({
   },},
 
   selectbox: {
+    height:30,width:250,
+    borderRadius:20,color:'#000',backgroundColor:'#AEAEB2',border:0,outline:'none',
 
-    borderRadius:0,backgroundColor:'#AEAEB2',border:0,outline:'none',
+  },
+  fileinput: { display:'none'},
 
+  fileinputbutton: {
+    marginLeft:10,
+    marginBottom:5,
+    "&:hover":{backgroundColor:'#000'} ,
+    width: 130,
+                    height: 35,
+                    borderRadius: 6,
+                    alignSelf: "flex-end",
+                    color: "#000",
+                    backgroundColor:"green",
+                    fontSize: 14,
+                    fontFamily: "AeonikBold",
+                    textTransform: "none", 
+
+  },
+  myclientstyle : {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 940,
+  height:600,
+  bgcolor: "background.paper",
+  borderRadius:0,
+  boxShadow: 15,
+  p: 4,  
+  ".fileinputbutton":{backgroundColor:'#000'}
+},
+
+ customHoverFocus: {
+    "&:hover, &.Mui-focusVisible": { backgroundColor: "#000" }
   }
 
-});
+}));
+
+
+
+
+
+const colourStyles: StylesConfig<ColourOption> = {
+  control: (styles) => ({ ...styles, backgroundColor: 'white' }),
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    const color = 'black';
+    return {
+      ...styles,
+      backgroundColor: '#fff',
+      color: 'black',
+      cursor: isDisabled ? 'not-allowed' : 'default',
+
+      ':active': {
+        ...styles[':active'],
+        backgroundColor:'#f2f2f2',
+      },
+    };
+  },
+  // input: (styles) => ({ height:30,color:'black',backgroundColor:'#fff',zIndex:99 }),
+  // placeholder: (styles) => ({ color:'black',backgroundColor:'#aeaeb2',zIndex:99 }),
+  // singleValue: (styles, { data }) => ({ color:'black',backgroundColor:'#f2f2f2',zIndex:99 }),
+};
+
+
+
+
+
 const StyledButton = withStyles({
   root: {
     backgroundColor: '#AEAEB2',
@@ -81,6 +155,7 @@ const clientstyle = {
   borderRadius:0,
   boxShadow: 15,
   p: 4,  
+  ".fileinputbutton":{backgroundColor:'#000'}
 };
 
 function Clients() {
@@ -216,6 +291,7 @@ const columns: GridColDef[] = [
     setEditModalOpen(false);
   };
 
+const options = useMemo(() => countryList().getData(), [])
 
 useEffect(() => {
 
@@ -454,13 +530,53 @@ window.reload();
 
 }
 
- const [profileimage, setProfileImage] = useState({ preview: '', data: '' })
+ const [profileimage, setProfileImage] = useState({ preview: '', data: '' });
+ const [url, setUrl] = useState('');
   // const [status, setStatus] = useState('')
-  const handleSubmit = async (e) => {
+  const handleProfileImageUpload = async (e) => {
+    alert('called');
+   
+
+
     e.preventDefault()
+   
+
+console.log('mpi'+JSON.stringify(profileimage));
+
+storage.ref(`/images/${profileimage.data}`).put(profileimage.data)
+ .then(snapshot => {
+      console.log("image upload success");
+      return snapshot.ref.getDownloadURL();
+    })
+    .then(downloadURL => {
+      // you can assign keys for square logo and horizontal logo with downloadURL value here
+      // or just provide a callback
+      //onSuccessCallback(downloadURL);
+      console.log('mdu'+downloadURL);
+      // when 'save settings'  is pressed line 314 uploads the key and value (imageurl)
+    })
+    .catch(error => {
+      console.error(error);
+      alert(error.message);
+    })
+
+
+/*
+  .on("state_changed" , alert("success") , () => {
+  
+        // Getting Download Link
+        storage.ref(`images/${profileimage.data}`).getDownloadURL()
+          .then((url) => {
+            setUrl(url);
+            console.log('url=='+url);
+          })
+      }); 
+*/
+
+
     let formData = new FormData()
     formData.append('file', profileimage.data)
-    const response = await fetch('http://localhost:5000/uploadProfilePicture', {
+    const response = await fetch('https://backend-incio.onrender.com/uploadProfileImage', {
       method: 'POST',
       body: formData,
     })
@@ -468,9 +584,10 @@ window.reload();
   }
 
   const handleFileChange = (e) => {
+    let mf = e.target.files[0];
     const img = {
-      preview: URL.createObjectURL(e.target.files[0]),
-      data: e.target.files[0],
+      data: mf.name,
+      preview: URL.createObjectURL(mf),      
     }
     setProfileImage(img)
   }
@@ -530,7 +647,7 @@ setEditClientMode(true);
 
 
 return (
-
+<>
 <Grid container>
 
 
@@ -642,13 +759,12 @@ return (
 
 
 
-
-
 <Modal
             open={openClientModal}
             onClose={() => handleCloseClientModal()}
             aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"            
+            aria-describedby="modal-modal-description"  
+            classes={classes}          
           >
             <Paper elevation={2} sx={clientstyle}>
 
@@ -757,28 +873,22 @@ return (
               /> <span style={{color:"#FF3B30"}}>{(zip.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{zIndex:99,position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Country</Typography>
-           <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={countryopen}
-          sx={{height:40,width:'100%',borderRadius:0,border:0,outline:'none'}}
-          onClose={handleCountryClose}
-          onOpen={handleCountryOpen}
-          value={country.value}
-          onChange={(e) => { setCountry({value:e.target.value,error:''}) }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select> <span style={{color:"#FF3B30"}}>{(country.error)}</span>
+              
+              <Select 
+              styles={colourStyles}
+              options={options} 
+              value={country.value} 
+              onChange={(e) => { setCountry({value:e,error:''}) }} 
+              />
+
+           
+
+            <span style={{color:"#FF3B30"}}>{(country.error)}</span>
 </Box>
 
 </Grid>
@@ -865,27 +975,17 @@ return (
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
-
- <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Company Country</Typography>
-           <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={ccountryopen}
-          sx={{height:40,width:'100%',borderRadius:0,border:0,outline:'none'}}
-          onClose={handleCCountryClose}
-          onOpen={handleCCountryOpen}
-          value={ccountry.value}
-          onChange={(e) => { setCCountry({value:e.target.value,error:''}) }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select> <span style={{color:"#FF3B30"}}>{(ccountry.error)}</span>
+<Select 
+              styles={colourStyles}
+              options={options} 
+              value={ccountry.value} 
+              onChange={(e) => { setCCountry({value:e,error:''}) }} 
+              /><span style={{color:"#FF3B30"}}>{(ccountry.error)}</span>
+
+ 
 </Box>
 
  </Grid>
@@ -909,26 +1009,32 @@ src={profileimage.preview? profileimage.preview:require('../assets/images/avatar
 
       
 </Box>
-<Box> 
+<Box sx={{display:'flex',width:250,flexDirection:'row'}}> 
 
 
- 
-<form onSubmit={handleSubmit}>
-<input type='file' name='file' style={{color:'red'}} onChange={handleFileChange}></input>
-        <button  style={{
-                    width: 140,
+<form onSubmit={handleProfileImageUpload}>
+<Box sx={{width:140}}>
+
+<label className={classes.fileinputbutton }>
+<input className={classes.fileinput} type='file' name='file' onChange={handleFileChange}></input>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold',color:''}}>&emsp;&nbsp;Select File</Typography>
+</label></Box><Box>
+        <Button style={{
+                    width: 100,
                     height: 30,
+                    marginTop:8,
                     marginLeft:15,
                     borderRadius: 6,
                     alignSelf: "flex-end",
                     color: "white",
                     backgroundColor:"#AEAEB2",
-                    fontSize: 14,
+                    fontSize: 13,
                     fontFamily: "AeonikBold",
-                    textTransform: "none",                   
-                  }} type='submit'>Upload</button>
-      </form>
-
+                    textTransform: "none", 
+                    '&:hover !important':{backgroundColor:'#000'}                  
+                  }} type='submit'>Upload</Button>
+      </Box>
+</form>
 </Box>
 </Box>
 </Box>
@@ -944,11 +1050,11 @@ src={profileimage.preview? profileimage.preview:require('../assets/images/avatar
       <Box sx={{display:'flex',marginTop:2,flexDirection:'row',alignItems:'center'}}> 
 
  <Avatar alt="Remy Sharp" sx={{marginLeft:-25,marginTop:1,width:80,height:80,borderRadius:40}} 
-src={require('../assets/images/avatar.png')} />
+src={"https://firebasestorage.googleapis.com/v0/b/inicio-77485.appspot.com/o/images%2Fdoggie-pic-4.jpg?alt=media&token=deeaea45-7eb9-4b0b-880e-f0e2e4e9b31b"} />
 
       
 
-<Box sx={{"& .MuiButton-root":{"&:hover":{backgroundColor:'#000'}}}}> 
+<Box sx={{zIndex:99,"& .MuiButton-root":{"&:hover":{backgroundColor:'#000'}}}}> 
 
 <StyledButton
                   onClick={() => {                    
@@ -957,14 +1063,16 @@ src={require('../assets/images/avatar.png')} />
                   style={{
                     width: 140,
                     height: 30,
+                    zIndex:99,
                     marginLeft:15,
                     borderRadius: 6,
                     alignSelf: "flex-end",
                     color: "white",
                     backgroundColor:"#AEAEB2",
-                    fontSize: 14,
+                    fontSize: 13,
                     fontFamily: "AeonikBold",
-                    textTransform: "none",                                                       
+                    textTransform: "none",   
+                    '&:hover':{backgroundColor:'#000'}                                                    
                   }}
                 >
                   Upload New
@@ -995,13 +1103,13 @@ src={require('../assets/images/avatar.png')} />
 
                 }}
               >
-                <StyledButton
+                <Button aria-label="custom-btn"
                   onClick={() => {                    
                     editClientMode? processEditClient() : createClient()
                   }}
-                  style={{
+                  sx={{
                     width: 150,
-                    height: 35,
+                    height: 30,
                     zIndex:99,
                     borderRadius: 6,
                     alignSelf: "center",
@@ -1010,17 +1118,24 @@ src={require('../assets/images/avatar.png')} />
                     fontSize: 14,
                     fontFamily: "AeonikBold",
                     textTransform: "none",                                   
-                    "&:hover":{backgroundColor:'#000'}
+                    "&:hover":{backgroundColor:'black'}
                   }}
                 >
                   {editClientMode? "Edit Client": "Create Client"}
-                </StyledButton>
+                </Button>
               </Box>
             </Paper>
           </Modal>
 
 
+
 </Grid>
+
+
+
+
+</>
+
 
   );
 

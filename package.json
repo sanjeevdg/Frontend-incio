@@ -33,6 +33,8 @@
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.7.0",
+    "react-select-country-list": "^2.2.3",
     "react-social-login-buttons": "^3.6.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"

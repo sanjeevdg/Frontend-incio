@@ -810,9 +810,10 @@ return (
                 fullWidth                
                 value={name.value}
                 onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
-              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(name.error)}</span>
+              /> 
+  <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(name.error)}</span>
 </Box>
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative'}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -828,7 +829,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(email.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -844,7 +845,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(phone.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -860,7 +861,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(address.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -876,7 +877,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(zip.error)}</span>
 </Box>
 
-<Box sx={{zIndex:99,position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',zIndex:99,position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -900,7 +901,7 @@ return (
 
 <Grid item xs={4} sx={{marginRight:3}}>
 
-<Box sx={{position:'relative'}}>
+<Box sx={{clear:'both',position:'relative'}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
              Company Name</Typography>
              <InputBase
@@ -913,7 +914,7 @@ return (
                 onChange={(e) => { setCName({value:e.target.value,error:''}) }}                              
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cname.error)}</span>
 </Box>
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -929,7 +930,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cemail.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -945,7 +946,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cphone.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -961,7 +962,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(caddress.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
 
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
@@ -977,7 +978,7 @@ return (
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(czip.error)}</span>
 </Box>
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{clear:'both',position:'relative',marginTop:1}}>
   <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Company Country</Typography>

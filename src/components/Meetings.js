@@ -73,6 +73,15 @@ const useStyles = makeStyles({
 
 });
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  elevation:0,
+  color: theme.palette.text.secondary,
+}));
+
 
 const eventstyle = {
   position: "absolute",
@@ -284,7 +293,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 }
 
 
-</Grid>
+
 
 
 
@@ -322,7 +331,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 <Grid item xs={12} sx={{display:'flex',flexDirection:'row'}}>
 
-<Grid item xs={6} md={6} sx={{width:240,marginRight:3,marginTop:1}}>
+<Grid item xs={4} md={4} sx={{width:240,marginRight:3,marginTop:1}}>
 
 <Box sx={{position:'relative'}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
@@ -335,7 +344,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 fullWidth                
                 value={name.value}
                 onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(name.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(name.error)}</span>
 </Box>
 <Box sx={{position:'relative',marginTop:3}}>
 
@@ -350,7 +359,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 fullWidth   
                 value={location.value}             
                 onChange={(e) => { setLocation({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(location.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(location.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:3}}>
@@ -368,7 +377,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={description.value}
                 fullWidth                
                 onChange={(e) => { setDescription({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(description.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(description.error)}</span>
 </Box>
 
 
@@ -385,7 +394,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={uniquelink.value}
                 fullWidth                
                 onChange={(e) => { setUniqueLink({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(uniquelink.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(uniquelink.error)}</span>
 </Box>
 
 
@@ -436,15 +445,17 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
           <MenuItem value={'oneweek'}><Typography sx={{fontSize:12, fontFamily:'AeonikBold'}}>Less than one week</Typography></MenuItem>
           <MenuItem value={'onemonth'}><Typography sx={{fontSize:12, fontFamily:'AeonikBold'}}>Less than one month</Typography></MenuItem>
           <MenuItem value={'indefinite'}><Typography sx={{fontSize:12, fontFamily:'AeonikBold'}}>Ongoing indefinite</Typography></MenuItem>
-        </Select> <span style={{color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(duration.error)}</span>
+        </Select> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(duration.error)}</span>
 </Box>
 
 
 
-<Box sx={{position:'relative',marginTop:3,display:'flex',alignItems:'center'}}>
- <Box sx={{width:'100%',marginTop:-8,marginBottom:1}}><Typography noWrap sx={{fontSize:13,color:'#000',fontFamily:'AeonikBold'}}>
+<Box sx={{position:'relative',flexDirection:'column',marginTop:4,display:'flex',alignItems:'center'}}>
+ <Box sx={{width:'100%',marginTop:-2,marginBottom:1}}><Typography noWrap sx={{fontSize:13,color:'#000',fontFamily:'AeonikBold'}}>
               Repeat on<br/></Typography></Box>
-              <Box sx={{display:'flex',alignItems:'center', marginBottom:-1,marginLeft:-33,marginTop:-4,flexDirection:'row'}}>
+              <Box sx={{display:'flex',width:290,flexWrap:'wrap',alignItems:'center'}}>
+             <Stack sx={{width:'290'}} direction="row" spacing={1} sx={{flexWrap:'wrap',marginTop:-1}}>
+             <Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
              <Checkbox
                 required
                 sx={{marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -452,7 +463,8 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeatmon}
                 onChange={(e) => { setRepeatMon({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>MON</Typography>
-
+              </Item>
+<Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -460,7 +472,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeattue}
                 onChange={(e) => { setRepeatTue({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>TUE</Typography>
-
+</Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -468,7 +480,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeatwed}
                 onChange={(e) => { setRepeatWed({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>WED</Typography>
-
+</Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -476,9 +488,10 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeatthu}
                 onChange={(e) => { setRepeatThu({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>THU</Typography>
-              </Box>
-              <Box sx={{display:'flex',position:'relative',marginTop:5,marginLeft:-25,flexDirection:'row'}}>
-              <Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+</Item>
+
+<Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
+
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -486,7 +499,9 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeatfri}
                 onChange={(e) => { setRepeatFri({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>FRI</Typography>
-              </Box>&nbsp;&nbsp;&nbsp;<Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+             
+</Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
+
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -494,7 +509,10 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 value={repeatsat}
                 onChange={(e) => { setRepeatSat({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SAT</Typography>
-         </Box><Box sx={{display:'flex',flexDirection:'row',alignItems:'center'}}>     
+         
+
+</Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
+
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
@@ -503,7 +521,8 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 onChange={(e) => { setRepeatSun({value:e.target.value,error:''}) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SUN
               </Typography>
-              </Box>
+              </Item></Stack>
+             
               </Box>
                
 
@@ -534,11 +553,11 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 fullWidth                
                 value={people.value}
                 onChange={(e) => { setPeople({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(people.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(people.error)}</span>
 </Box>
 
 
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%', marginTop:2,maxWidth: 360, bgcolor: 'background.paper' }}>
       <ListItem alignItems="center"
          secondaryAction={
               <IconButton edge="end" onClick={() => {console.log('xxx');}} aria-label="comments">
@@ -617,7 +636,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop:3,
-                  zIndex:99
+                  zIndex:299
                 }}
               >
                 <Button aria-label="custom-btn"
@@ -627,25 +646,26 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                   style={{
                     width: 150,
                     height: 30,
-                    zIndex:99,
+                    zIndex:299,
                     marginBottom:10,
-                    borderRadius: 15,
+                    borderRadius: 25,
                     alignSelf: "center",
                     color: "white",
                     backgroundColor:"#AEAEB2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
                     textTransform: "none", 
-                    "&:hover":{bgcolor:'black'},                  
+                    "&:hover":{backgroundColor:'black'}
+                    
                   }}
                 >
-                  Create Event
+               <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>   Create Event</Typography>
                 </Button>
               </Box> 
             </Paper>
           </Modal>
 
-
+</Grid>
 </LocalizationProvider>
 
 

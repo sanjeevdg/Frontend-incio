@@ -532,6 +532,9 @@ window.reload();
 
  const [profileimage, setProfileImage] = useState({ preview: '', data: '' });
  const [url, setUrl] = useState('');
+
+
+
   // const [status, setStatus] = useState('')
   const handleProfileImageUpload = async (e) => {
     alert('called');
@@ -807,7 +810,7 @@ return (
                 fullWidth                
                 value={name.value}
                 onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(name.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(name.error)}</span>
 </Box>
 <Box sx={{position:'relative',marginTop:1}}>
 
@@ -822,7 +825,7 @@ return (
                 fullWidth   
                 value={email.value}             
                 onChange={(e) => { setEmail({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(email.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(email.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -838,7 +841,7 @@ return (
                 value={phone.value}
                 fullWidth                
                 onChange={(e) => { setPhone({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(phone.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(phone.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -854,7 +857,7 @@ return (
                 value={address.value}
                 fullWidth                
                 onChange={(e) => { setAddress({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(address.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(address.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -870,7 +873,7 @@ return (
                 value={zip.value}
                 fullWidth                
                 onChange={(e) => { setZip({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(zip.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(zip.error)}</span>
 </Box>
 
 <Box sx={{zIndex:99,position:'relative',marginTop:1}}>
@@ -888,7 +891,7 @@ return (
 
            
 
-            <span style={{color:"#FF3B30"}}>{(country.error)}</span>
+            <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(country.error)}</span>
 </Box>
 
 </Grid>
@@ -908,7 +911,7 @@ return (
                 fullWidth                
                 value={cname.value}
                 onChange={(e) => { setCName({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(cname.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cname.error)}</span>
 </Box>
 <Box sx={{position:'relative',marginTop:1}}>
 
@@ -923,7 +926,7 @@ return (
                 fullWidth   
                 value={cemail.value}             
                 onChange={(e) => { setCEmail({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(cemail.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cemail.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -939,7 +942,7 @@ return (
                 value={cphone.value}
                 fullWidth                
                 onChange={(e) => { setCPhone({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(cphone.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(cphone.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -955,7 +958,7 @@ return (
                 value={caddress.value}
                 fullWidth                
                 onChange={(e) => { setCAddress({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(caddress.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(caddress.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -971,7 +974,7 @@ return (
                 value={czip.value}
                 fullWidth                
                 onChange={(e) => { setCZip({value:e.target.value,error:''}) }}                              
-              /> <span style={{color:"#FF3B30"}}>{(czip.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(czip.error)}</span>
 </Box>
 
 <Box sx={{position:'relative',marginTop:1}}>
@@ -983,7 +986,7 @@ return (
               options={options} 
               value={ccountry.value} 
               onChange={(e) => { setCCountry({value:e,error:''}) }} 
-              /><span style={{color:"#FF3B30"}}>{(ccountry.error)}</span>
+              /><span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(ccountry.error)}</span>
 
  
 </Box>

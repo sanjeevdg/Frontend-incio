@@ -14,7 +14,7 @@ import { FacebookLoginButton } from "react-social-login-buttons";
 import { GoogleLoginButton } from "react-social-login-buttons";
 
 import {LockOutlinedIcon,Visibility,VisibilityOff} from '@mui/icons-material';
-
+import {styled, withStyles, makeStyles } from "@mui/styles";
 
 import {InputBase,FormControl,InputLabel,FilledInput,InputAdornment,IconButton} from '@mui/material';
 
@@ -39,9 +39,22 @@ function Copyright(props) {
   );
 }
 
+const useStyles = makeStyles(theme => ({
+// 
+  mymuiinputbase: {
+    backgroundColor: '#f2f2f2',
+    color: '#000',
+    },
+}));
+
+
+
+
 function Login() {
 
 let navigate = useNavigate();
+
+let classes = useStyles();
 
 let fauth = getAuth();
 
@@ -156,7 +169,7 @@ var provider = new FacebookAuthProvider();
 
 //https://btauth-94c78.firebaseapp.com/__/auth/handler
 
-https://www.facebook.com/v8.0/dialog/oauth?response_type=code%2Cgranted_scopes&client_id=478019230921376&redirect_uri=https%3A%2F%2Fbtauth-94c78.firebaseapp.com%2F__%2Fauth%2Fhandler&state=AMbdmDkex99fUmRM0TTMYk72reb514c1xzuFXUzIs0aiTup1jBi1dK9u1zdArqV7ueEDNniMM3-ahkSjAraDUJ3LNmMjgQuLqqvZEAJiQPSR06sxBrDxdmzw5jY4suKAikUVA7A60gQdjkItQOxpcnPHjB_1uaZ9E0EaPKaI5CT9CKNT0voBFrHvj1nVkDl0wbn0oBgqF0uMlrGaW9-dYL8PiMxBvWI4Q7DPVxBPgL82mmo9661jAOoX78CW4CaVswKYkDF6lWDSCVhbsL0MLmLXrD4ECkFfBPVf47qb9ZAU094cAjcqfxyZ0CMZgfArtjhG5mDI38csUiR7Vfh2&scope=public_profile%2Cemail&context_uri=https%3A%2F%2F58ca-110-224-17-19.ngrok.io
+//https://www.facebook.com/v8.0/dialog/oauth?response_type=code%2Cgranted_scopes&client_id=478019230921376&redirect_uri=https%3A%2F%2Fbtauth-94c78.firebaseapp.com%2F__%2Fauth%2Fhandler&state=AMbdmDkex99fUmRM0TTMYk72reb514c1xzuFXUzIs0aiTup1jBi1dK9u1zdArqV7ueEDNniMM3-ahkSjAraDUJ3LNmMjgQuLqqvZEAJiQPSR06sxBrDxdmzw5jY4suKAikUVA7A60gQdjkItQOxpcnPHjB_1uaZ9E0EaPKaI5CT9CKNT0voBFrHvj1nVkDl0wbn0oBgqF0uMlrGaW9-dYL8PiMxBvWI4Q7DPVxBPgL82mmo9661jAOoX78CW4CaVswKYkDF6lWDSCVhbsL0MLmLXrD4ECkFfBPVf47qb9ZAU094cAjcqfxyZ0CMZgfArtjhG5mDI38csUiR7Vfh2&scope=public_profile%2Cemail&context_uri=https%3A%2F%2F58ca-110-224-17-19.ngrok.io
 
 //firebase.auth().
    signInWithPopup(auth, provider)   
@@ -195,63 +208,25 @@ return (
             <Typography  sx={{fontSize:30,fontFamily:'AeonikBold'}} component="h1" variant="h5">
               Log In
             </Typography>
-            <Box component="div" noValidate sx={{ mt: 3,mx:'auto'}}>
-        {!show?       
-              <Box sx={{mx:'auto',backgroundColor:'#f5f5f5',p:2,m:1,width:330,alignItems:'center',alignSelf:'center',justifyContent:'center'}}>
+       
 
 
-              <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
-              Phone Number</Typography>
-              <PhoneInput
-                margin="normal"
-                required
-                country={'in'}             
-                onChange={(e) => {setnumber(e) }}
-                value={mynumber}
-                label="Phone Number"
-                autoFocus
-              /><Box  sx={{mt:1,mb:2}} id="recaptcha-container"></Box>
-              <Button
-               onClick={() => signin()}
-                type="submit"
-                variant="contained"
-                sx={{"&:hover":{backgroundColor:'#000'},textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
-              >
-                Get OTP
-              </Button></Box>:<></>}
-          {show?      
-              <Box sx={{mx:'auto',backgroundColor:'#f5f5f5',p:2,m:1,width:330}}><TextField
-                margin="normal"
-                required
-                fullWidth
-                onChange={(e) => { setotp(e.target.value) }}
-                label="Enter OTP"                
-              /><Button
-               onClick={() => {ValidateOtp();notifylogin();}}
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 1, mb: 1,textTransform:'none' }}
-              >
-                Verify OTP
-              </Button></Box>:<></>}
-              
-              
-              
-              <Box elevation={1} sx={{width:330,p:2,m:1,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',flexDirection:'column'}}>
-          <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:-10,marginBottom:10}}>or Login using ..</Typography>
 
-<Box sx={{width:'100%',backgroundColor:'#fff',width:330}}>
+
+<Box elevation={1} sx={{width:330,p:2,m:1,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',flexDirection:'column'}}>
+          
+
+<Box sx={{backgroundColor:'#fff',width:330}}>
 
 
 <Box sx={{width:'100%'}}>
               <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Email</Typography>
-             <InputBase
+             <InputBase className={classes.mymuiinputbase}
                 required
-                sx={{height:40,width:'100%' ,color:'black', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
+                sx={{".MuiInputBase :input":{backgroundColor:'#f2f2f2'},height:40,width:'100%' ,color:'black', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
                 size="small"
                 type="email"
                 value={email.value}
@@ -287,24 +262,100 @@ return (
           />
 </Box>
 
-<Box>
+<Box sx={{width:200,display:'flex',alignItems:'flex-end',alignSelf:'flex-end',justifyContent:'flex-end',color:'#000',marginLeft:21}}>
               <Button
                onClick={() => {setLoginLoading(true);signIn();}}
                 type="submit"
                 variant="contained"
-                sx={{"&:hover":{backgroundColor:'#000'},width:'60%',textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
+                sx={{boxShadow:'none',"&:hover":{backgroundColor:'#000',color:'#fff'},color:'#000',fontWeight:'bold',width:130,textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',fontFamily:'AeonikRegular',backgroundColor: '#f2f2f2'}}
               >
-              Log In{ loginLoading && <CircularProgress size="small" color="info"/> }
+              Log In { loginLoading && <CircularProgress size="small" color="info"/> }
               </Button></Box>
 
 </Box>
 
+
+
+
+
+
+
+
+
+            <Box  elevation={1} sx={{width:330,p:2,m:1,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',flexDirection:'column'}}>
+       
+<Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:-10,marginBottom:10}}>or Login using Phone number..</Typography>
+        {!show?       
+              <Box sx={{mx:'auto',backgroundColor:'#fff',p:2,m:1,width:340,alignItems:'center',alignSelf:'center',justifyContent:'center'}}>
+
+
+              <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Phone Number</Typography>
+              <PhoneInput
+                margin="normal"
+                required
+                country={'in'}             
+                onChange={(e) => {setnumber(e) }}
+                value={mynumber}
+                inputStyle={{backgroundColor:'#f2f2f2',width:316}}
+                label="Phone Number"
+                autoFocus
+              /><Box  sx={{mt:1,mb:2}} id="recaptcha-container"></Box>
+              <Button
+               onClick={() => signin()}
+                type="submit"
+                variant="contained"
+                sx={{width:120,boxShadow:'none',marginLeft:24,"&:hover":{backgroundColor:'#000',color:'#fff'},fontWeight:'bold',color:'#000',textTransform:'none',fontFamily:'AeonikRegular',backgroundColor: '#f2f2f2'}}
+              >
+                Get Otp
+              </Button></Box>:<></>}
+          {show?      
+              <Box sx={{mx:'auto',backgroundColor:'#fff',p:2,m:1,width:330,display:'flex',flexDirection:'column',alignItems:'flex-end',justifyContent:'flex-end'}}>
+              <InputBase
+                required
+                fullWidth
+                placeholder="Enter Otp"
+                sx={{backgroundColor:'#f2f2f2',height:40,fontSize:13,fontFamily:'AeonikBold'}}
+                onChange={(e) => { setotp(e.target.value) }}
+                label="Enter OTP"                
+              />
+              
+              <Button
+               onClick={() => {ValidateOtp();notifylogin();}}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{align:'right',boxShadow:'none', marginRight:-22,width:130,fontWeight:'bold',mt: 1, mb: 1,"&:hover":{backgroundColor:'#000',color:'#fff'},color:'#000',textTransform:'none', display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',fontFamily:'AeonikRegular',backgroundColor: '#f2f2f2'}}
+              >
+                Verify Otp
+              </Button></Box>:<></>}
+              
+              
+              
+
           <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:10,marginBottom:10}}>or ..</Typography>
 
 
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/google-login.png')} style={{width:350}}/></Box>
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/apple-login.png')} style={{width:350}} /> </Box>
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/linkedin-login.png')} style={{width:350}} /> </Box>
+<Box onClick={() => signInWithGoogle()} sx={{display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/google.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with Google</Typography>
+
+</Box>
+
+<Box onClick={() => signInWithGoogle()} sx={{marginTop:-3,display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/appleicon.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with Apple</Typography>
+
+</Box>
+
+
+<Box onClick={() => signInWithGoogle()} sx={{marginTop:-3,display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/linkedin.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with LinkedIn</Typography>
+
+</Box>
+
 
 
 

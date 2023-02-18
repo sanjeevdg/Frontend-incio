@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import { firebase, auth } from '../config/firebase-config';
@@ -10,9 +10,10 @@ import {styled, withStyles, makeStyles } from "@mui/styles";
 
 import ButtonGroup from '@mui/material/ButtonGroup';
 
-import {Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
+import {Autocomplete,Chip,Avatar,Toolbar,IconButton,Tooltip,Divider,MenuItem,Popover, Stack,
         Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Paper,Box,
         Badge,Collapse,Grid,Typography,Modal,InputBase  } from '@mui/material';
+
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -37,6 +38,9 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 
 
+import {userlist} from '../config/dummylist';
+
+
 
 import {requiredValidator,emailValidator} from '../utils/validators';
 
@@ -47,6 +51,9 @@ import ListView from './ListView';
 import CalendarView from './CalendarView';
 
 
+
+
+//import Meeting from 'google-meet-api';
 
 const useStyles = makeStyles({
 
@@ -102,7 +109,6 @@ function Meetings() {
 
 let navigate = useNavigate();
 
-
 let classes = useStyles();
 
 const [view, setView] = useState('calendar');
@@ -139,26 +145,52 @@ const [location, setLocation] = useState({value:'',error:''});
 const [description, setDescription] = useState({value:'',error:''});
 const [uniquelink, setUniqueLink] = useState({value:'',error:''});
 const [mstart,setMStart] = useState(dayjs(new Date()));
-
 const [duration,setDuration] = useState({value:'',error:''});
-
-
-
-const [repeatmon,setRepeatMon] = useState({value:'',error:''});
-const [repeattue,setRepeatTue] = useState({value:'',error:''});
-const [repeatwed,setRepeatWed] = useState({value:'',error:''});
-const [repeatthu,setRepeatThu] = useState({value:'',error:''});
-const [repeatfri,setRepeatFri] = useState({value:'',error:''});
-const [repeatsat,setRepeatSat] = useState({value:'',error:''});
-const [repeatsun,setRepeatSun] = useState({value:'',error:''});
-
 const [people, setPeople] = useState({value:'',error:''});
 
 
+const [rptmon,setRptMon] = useState(false);
+const [rpttue,setRptTue] = useState(false);
+const [rptwed,setRptWed] = useState(false);
+const [rptthu,setRptThu] = useState(false);
+const [rptfri,setRptFri] = useState(false);
+const [rptsat,setRptSat] = useState(false);
+const [rptsun,setRptSun] = useState(false);
+
+
+
+
+
+useEffect(() => {
+
+/*
+
+Meeting({
+clientId : '593436295572-fm9krcm5lg4u7kv70dkchm6fk9n0q0f5.apps.googleusercontent.com',
+clientSecret : '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',
+refreshToken : '',
+date : "2023-02-19",
+time : "10:59",
+summary : 'summary',
+location : 'location',
+description : 'description'
+}).then(function(result){
+console.log('gmeetresponse:'+result);//result is the final link
+})
+
+*/
+
+
+
+}, []);
+
+
+
+
+
+
+
 function createNewEvent() {
-
-
-alert('name='+name.value+'location='+location.value+'descr='+description.value+'unilk='+uniquelink.value+'mstart='+mstart+'dura='+duration.value+'peple='+people.value);
 
 
 const nameError = requiredValidator(name.value);
@@ -167,10 +199,12 @@ const descriptionError = requiredValidator(description.value);
 const uniquelinkError = requiredValidator(uniquelink.value);
 //const mstartError = requiredValidator(mstart.value);
 const durationError = requiredValidator(duration.value);
-const peopleError = requiredValidator(people.value);
+// const peopleError = requiredValidator(people.value);
 
-   if (nameError || locationError || descriptionError || uniquelinkError || durationError || 
-    peopleError ) {
+
+
+
+   if (nameError || locationError || descriptionError || uniquelinkError || durationError) {
       setName({ ...name, error: nameError });
       setLocation({ ...location, error: locationError });
       setDescription({...description,error:descriptionError});
@@ -178,12 +212,18 @@ const peopleError = requiredValidator(people.value);
    //   setMStart({...mstart,error:mstartError});
       setDuration({...duration,error:durationError});
 
-      setPeople({ ...people, error: peopleError });
+   //   setPeople({ ...people, error: peopleError });
       
     //  setTermAdding(false);
     alert('not sending...')
       return false;
     }
+
+
+
+
+
+
 
 const body = {
    "name": name.value, 
@@ -193,10 +233,16 @@ const body = {
    "mstart": mstart,
    "duration": duration.value,
    "people": people.value, 
-   
+   "rptmon":rptmon ,
+   "rpttue":rpttue ,
+   "rptwed":rptwed ,
+   "rptthu":rptthu,
+   "rptfri":rptfri ,
+   "rptsat":rptsat ,
+   "rptsun":rptsun    
 };
 
-console.log('body==',body);
+console.log('body==',JSON.stringify(body));
 
 var formBody = [];
 for (var key in body) {
@@ -210,7 +256,7 @@ formBody = formBody.join('&');
 // backend-incio.onrender.com
 alert('inhere');
 try{
-  fetch(`https://backend-incio.onrender.com/addNewEvent`, {
+  fetch(`http://localhost:5000/addNewEvent`, {
    method: 'POST', 
    headers: {
         'Content-Type': 'application/x-www-form-urlencoded',              
@@ -241,7 +287,25 @@ window.reload();
 }
 
 
+const getGMeetLink = () => {
 
+/*
+
+Meeting({
+clientId : '593436295572-fm9krcm5lg4u7kv70dkchm6fk9n0q0f5.apps.googleusercontent.com',
+clientSecret : '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',
+refreshToken : '',
+date : "2023-02-19",
+time : "10:59",
+summary : 'summary',
+location : 'location',
+description : 'description'
+}).then(function(result){
+console.log('gmeetresponse:'+result);//result is the final link
+})
+*/
+
+}
 
 
 return (
@@ -277,6 +341,8 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 </Grid>
 
 
+
+
 {cardView?
 <CardView/>:<></>
 
@@ -297,14 +363,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 
 
-
-<Modal
-            open={openEventModal}
-            onClose={() => handleCloseEventModal()}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"            
-          >
-            <Paper elevation={2} sx={eventstyle}>
+            <Paper elevation={0} sx={{marginBottom:10,marginLeft:28,marginTop:14}}>
 
             <Grid item xs={12}>
               <Box
@@ -331,7 +390,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 <Grid item xs={12} sx={{display:'flex',flexDirection:'row'}}>
 
-<Grid item xs={4} md={4} sx={{width:240,marginRight:3,marginTop:1}}>
+<Grid item xs={4} md={4} sx={{width:240,marginRight:2,marginTop:1}}>
 
 <Box sx={{position:'relative'}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
@@ -381,28 +440,13 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 </Box>
 
 
-<Box sx={{position:'relative',marginTop:3}}>
-
- <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
-
-              Unique link</Typography>
-             <InputBase
-                required
-                sx={{height:35,width:'100%' ,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
-                size="small"
-                type="text"
-                value={uniquelink.value}
-                fullWidth                
-                onChange={(e) => { setUniqueLink({value:e.target.value,error:''}) }}                              
-              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(uniquelink.error)}</span>
-</Box>
 
 
 </Grid>
 
 
 
-<Grid item xs={4} sx={{width:250,marginRight:3,marginTop:1}}>
+<Grid item xs={4} sx={{width:250,marginRight:2,marginTop:1}}>
 
 
 <Box sx={{position:'relative'}}>
@@ -453,15 +497,15 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 <Box sx={{position:'relative',flexDirection:'column',marginTop:4,display:'flex',alignItems:'center'}}>
  <Box sx={{width:'100%',marginTop:-2,marginBottom:1}}><Typography noWrap sx={{fontSize:13,color:'#000',fontFamily:'AeonikBold'}}>
               Repeat on<br/></Typography></Box>
-              <Box sx={{display:'flex',width:290,flexWrap:'wrap',alignItems:'center'}}>
-             <Stack sx={{width:'290'}} direction="row" spacing={1} sx={{flexWrap:'wrap',marginTop:-1}}>
+              
+             <Stack direction="row" spacing={1} sx={{flexWrap:'wrap',width:280,marginTop:-1}}>
              <Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
              <Checkbox
                 required
                 sx={{marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatmon}
-                onChange={(e) => { setRepeatMon({value:e.target.value,error:''}) }}                              
+                value={rptmon}
+                onChange={(e) => { setRptMon(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>MON</Typography>
               </Item>
 <Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
@@ -469,24 +513,24 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeattue}
-                onChange={(e) => { setRepeatTue({value:e.target.value,error:''}) }}                              
+                value={rpttue}
+                onChange={(e) => { setRptTue(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>TUE</Typography>
 </Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatwed}
-                onChange={(e) => { setRepeatWed({value:e.target.value,error:''}) }}                              
+                value={rptwed}
+                onChange={(e) => { setRptWed(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>WED</Typography>
 </Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
 <Checkbox
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatthu}
-                onChange={(e) => { setRepeatThu({value:e.target.value,error:''}) }}                              
+                value={rptthu}
+                onChange={(e) => { setRptThu(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>THU</Typography>
 </Item>
 
@@ -496,8 +540,8 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatfri}
-                onChange={(e) => { setRepeatFri({value:e.target.value,error:''}) }}                              
+                value={rptfri}
+                onChange={(e) => { setRptFri(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>FRI</Typography>
              
 </Item><Item sx={{display:'flex',flexDirection:'row',alignItems:'center'}} elevation={0}>
@@ -506,8 +550,8 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatsat}
-                onChange={(e) => { setRepeatSat({value:e.target.value,error:''}) }}                              
+                value={rptsat}
+                onChange={(e) => { setRptSat(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SAT</Typography>
          
 
@@ -517,46 +561,80 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
                 required
                 sx={{marginLeft:-1,marginRight:-1,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold'}}
                 size="small"
-                value={repeatsun}
-                onChange={(e) => { setRepeatSun({value:e.target.value,error:''}) }}                              
+                value={rptsun}
+                onChange={(e) => { setRptSun(e.target.checked) }}                              
               /><Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>SUN
               </Typography>
               </Item></Stack>
              
-              </Box>
+              
                
 
+</Box>
+
+ </Grid>
+
+
+
+<Grid item xs={4} md={4} sx={{width:250,marginRight:2,marginTop:1}}>
+
+<Box sx={{position:'relative'}}>
+
+
+ <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Unique link</Typography>
+             <InputBase
+                required
+                sx={{height:35,width:'100%' ,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
+                size="small"
+                type="text"
+                value={uniquelink.value}
+                fullWidth                
+                onChange={(e) => { setUniqueLink({value:e.target.value,error:''}) }}                              
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(uniquelink.error)}</span>
 </Box>
 
 
 
 
 
-
-
-
- </Grid>
+</Grid>
 
 
 
 <Grid item xs={4}>
 
 
-<Box sx={{position:'relative',marginTop:1}}>
+<Box sx={{position:'relative',marginTop:1,height:60}}>
  <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
               People</Typography>
-             <InputBase
+
+
+ <Autocomplete
+      disablePortal
+      variant="standard"
+      id="combo-box-demo"
+       sx={{
+        '& input':{height:3,border:0,outline:'none'},
+        width:260,
+      }}
+      options={userlist.map((option) => option.name)}
+      renderInput={(params) => <TextField {...params} sx={{border:0,outline:'none'}}/>}
+    />              
+      {/*       <InputBase
                 required
                 sx={{height:35,width:'100%' ,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
                 size="small"
                 type="text"
                 fullWidth                
                 value={people.value}
-                onChange={(e) => { setPeople({value:e.target.value,error:''}) }}                              
-              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(people.error)}</span>
+                onChange={(e) => { setPeople({value:e.target.value,error:''}); }}                              
+              /> */}
+      <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(people.error)}</span>
 </Box>
 
-
+<Paper sx={{maxHeight:'100%',overflow:'auto'}}>
     <List sx={{ width: '100%', marginTop:2,maxWidth: 360, bgcolor: 'background.paper' }}>
       <ListItem alignItems="center"
          secondaryAction={
@@ -623,6 +701,7 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
 
 </List>
 
+</Paper>
 
 
 </Grid>
@@ -633,38 +712,58 @@ sx={{'&:hover': {backgroundColor:'black'},textTransform:'none',border:'none',out
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
                   marginTop:3,
-                  zIndex:299
+                  zIndex:99
                 }}
               >
-                <Button aria-label="custom-btn"
-                  onClick={() => {   
-                    setEventCreating(true);createNewEvent();                                     
-                  }}
-                  style={{
+
+              <Button aria-label="custom-btn"
+                  
+                  sx={{
                     width: 150,
                     height: 30,
-                    zIndex:299,
-                    marginBottom:10,
-                    borderRadius: 25,
+                    zIndex:99,
+                    marginRight:3,
+                    borderRadius: 6,
                     alignSelf: "center",
-                    color: "white",
-                    backgroundColor:"#AEAEB2",
+                    color: "#000",
+                    backgroundColor:"#f2f2f2",
                     fontSize: 14,
                     fontFamily: "AeonikBold",
-                    textTransform: "none", 
-                    "&:hover":{backgroundColor:'black'}
-                    
+                    textTransform: "none",                                   
+                    "&:hover":{backgroundColor:'black',color:'#fff'}
                   }}
                 >
-               <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>   Create Event</Typography>
+                Cancel
                 </Button>
+                <Button aria-label="custom-btn"
+                  
+                  sx={{
+                    width: 150,
+                    height: 30,
+                    zIndex:99,
+                    marginRight:3,
+                    borderRadius: 6,
+                    alignSelf: "center",
+                    color: "#000",
+                    backgroundColor:"#f2f2f2",
+                    fontSize: 14,
+                    fontFamily: "AeonikBold",
+                    textTransform: "none",                                   
+                    "&:hover":{backgroundColor:'black',color:'#fff'}
+                  }}
+                   onClick={() => {   
+                    setEventCreating(true);createNewEvent();                                     
+                  }}
+                >
+                Create event
+                </Button>
+                
               </Box> 
             </Paper>
-          </Modal>
-
+          
 </Grid>
 </LocalizationProvider>
 

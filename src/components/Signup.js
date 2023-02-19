@@ -109,7 +109,7 @@ for (var key in body) {
 }
 formBody = formBody.join('&');
 
-fetch('http://localhost:5000/checkEmailExists', {
+fetch('https://backend-incio.onrender.com/checkEmailExists', {
 
    method: 'POST', 
    headers: {
@@ -158,7 +158,7 @@ formBody = formBody.join('&');
 
 
 try{
-  fetch('http://localhost:5000/createUser', {
+  fetch('https://backend-incio.onrender.com/createUser', {
 
    method: 'POST', 
    headers: {

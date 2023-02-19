@@ -170,7 +170,7 @@ useEffect(() => {
 // backend-incio.onrender.com
 
 try{
-  fetch('http://localhost:5000/getAllUsers', {
+  fetch('https://backend-incio.onrender.com/getAllUsers', {
 
    method: 'POST', 
    headers: {
@@ -289,7 +289,7 @@ formBody = formBody.join('&');
 // backend-incio.onrender.com
 alert('inhere');
 try{
-  fetch(`http://localhost:5000/addNewEvent`, {
+  fetch(`https://backend-incio.onrender.com/addNewEvent`, {
    method: 'POST', 
    headers: {
         'Content-Type': 'application/x-www-form-urlencoded',              

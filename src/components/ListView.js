@@ -229,6 +229,38 @@ const [rptfritr,setRptFriTr] = useState(row.rptfri);
 const [rptsattr,setRptSatTr] = useState(row.rptsat);
 const [rptsuntr,setRptSunTr] = useState(row.rptsun);
 
+const [myusers, setMyUsers] = useState(null);
+const [myusersloaded,setMyUsersLoaded] = useState(false);
+
+
+
+useEffect(() => {
+
+// retrieve all users here 
+// backend-incio.onrender.com
+
+try{
+  fetch('http://localhost:5000/getAllUsers', {
+
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      }   
+}).then((resp) => {
+  resp.json().then((data) => {
+  let adata = data;
+  setMyUsers(adata.myusers); 
+  setMyUsersLoaded(true); 
+console.log('adata=',adata);
+     });
+});
+} catch(e) { console.log('caught err'+e.message); }
+
+
+
+
+
+},[]);
 
 
 function editEventTr() {
@@ -291,7 +323,7 @@ formBody = formBody.join('&');
 // curl -d "formname=test1&displayname=est1" -X POST https://710d-2409-4060-1e-b158-1d34-fc03-ff6d-1ef2.ngrok.io/createNewForm
 // backend-incio.onrender.com
 try{
-  fetch(`https://backend-incio.onrender.com/editEvent`, {
+  fetch(`http://localhost:5000/editEvent`, {
    method: 'POST', 
    headers: {
         'Content-Type': 'application/x-www-form-urlencoded',              
@@ -576,17 +608,26 @@ try{
               People</Typography>
 
 
- <Autocomplete
+<Autocomplete
       disablePortal
+      multiple
+      freeSolo
+      value={peopletr.value}
+      getOptionLabel={(option) => option}
+      isOptionEqualToValue={(option, value) => option === value.name}
       variant="standard"
       id="combo-box-demo"
        sx={{
         '& input':{height:3,border:0,outline:'none'},
         width:260,
       }}
-      options={userlist.map((option) => option.name)}
-      renderInput={(params) => <TextField {...params} sx={{border:0,outline:'none'}}/>}
-    />              
+      onChange={(event, newValue) => {
+          setPeopleTr({value:newValue,error:''});
+        }}
+      options={myusersloaded?myusers.map((option) => option.name):[{name:'dummyuser',value:'dummyuser'}]}
+      renderInput={(params) => { 
+         return (<TextField  sx={{border:0,overflowY:'auto',maxHeight:200,outline:'none'}} { ...params } />);
+            }} />              
       {/*       <InputBase
                 required
                 sx={{height:35,width:'100%' ,color:'#8E8E9D', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
@@ -599,8 +640,11 @@ try{
       <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(peopletr.error)}</span>
 </Box>
 
+{/*
 <Paper sx={{maxHeight:'100%',overflow:'auto'}}>
     <List sx={{ width: '100%', marginTop:2,maxWidth: 360, bgcolor: 'background.paper' }}>
+      
+
       <ListItem alignItems="center"
          secondaryAction={
               <IconButton edge="end" onClick={() => {console.log('xxx');}} aria-label="comments">
@@ -617,7 +661,7 @@ try{
         <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
           Leo Sayer          </Typography>
         </ListItemText>
-        
+      
       </ListItem>
 
 <ListItem  sx={{marginTop:-1}} alignItems="center"
@@ -667,7 +711,7 @@ try{
 </List>
 
 </Paper>
-
+*/}
 </Box>
 
 </Box>     

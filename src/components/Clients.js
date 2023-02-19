@@ -346,6 +346,18 @@ function Row(props) {
 
   const [open, setOpen] = React.useState(false);
 
+
+const [openRoleSelect, setOpenRoleSelect] = React.useState(false);
+
+  const handleCloseRoleSelect = () => {
+    setOpenRoleSelect(false);
+  };
+
+  const handleOpenRoleSelect = () => {
+    setOpenRoleSelect(true);
+  };
+
+
 //console.log('mrow=='+JSON.stringify(row));
 
 const [nametr, setNameTr] = useState({value:row.name,error:''});
@@ -597,7 +609,7 @@ try{
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
+        <TableCell sx={{width:10}}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -606,14 +618,14 @@ try{
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        <TableCell>
+        <TableCell sx={{width:40}}>
           {row.name}
         </TableCell>
-        <TableCell align="right">{row.cname}</TableCell>
-        <TableCell align="right">{row.cemail}</TableCell>
-        <TableCell align="right">{row.phone}</TableCell>
-        <TableCell align="right">{'$ 1,000.00'}</TableCell>
-        <TableCell align="right">{'$ 2,500.00'}</TableCell>
+        <TableCell  sx={{width:50}} align="left">{row.cname}</TableCell>
+        <TableCell  sx={{width:50}} align="left">{row.cemail}</TableCell>
+        <TableCell  sx={{width:30}} align="right">{row.phone}</TableCell>
+        <TableCell  sx={{width:20}} align="right">{'$ 1,000.00'}</TableCell>
+        <TableCell  sx={{width:20}} align="right">{'$ 2,500.00'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -1790,7 +1802,7 @@ src={companyimage.preview?companyimage.preview:require('../assets/images/avatar.
 <Grid sx={{position:'relative',top:-150,left:205,display:'flex',flexDirection:'row'}} item xs={10}>
 
 
-<Paper
+<Paper elevation={0}
                   sx={{
                     p: 2,
                     display: 'flex',
@@ -1803,17 +1815,17 @@ src={companyimage.preview?companyimage.preview:require('../assets/images/avatar.
 {clientsLoading?
 
 
- <TableContainer component={Paper} sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+ <TableContainer component={Paper} sx={{boxShadow:'none',border:0,fontSize:13,fontFamily:'AeonikBold'}}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell />
             <TableCell>Name</TableCell>
-            <TableCell align="right">Company Name</TableCell>
-            <TableCell align="right">Email Address</TableCell>
-            <TableCell align="right">Phone</TableCell>
-            <TableCell align="right">Income</TableCell>
-            <TableCell align="right">Outcome</TableCell>            
+            <TableCell>Company Name</TableCell>
+            <TableCell>Email Address</TableCell>
+            <TableCell>Phone</TableCell>
+            <TableCell>Income</TableCell>
+            <TableCell>Outcome</TableCell>            
           </TableRow>
 
         </TableHead>
@@ -1838,6 +1850,7 @@ src={companyimage.preview?companyimage.preview:require('../assets/images/avatar.
               count={myclients.length}
               rowsPerPage={rowsPerPage}
               page={page}
+              sx={{width:'100%'}}
               SelectProps={{
                 inputProps: {
                   'aria-label': 'rows per page',

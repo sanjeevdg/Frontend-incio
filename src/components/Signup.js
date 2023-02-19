@@ -21,7 +21,7 @@ import PhoneInput from 'react-phone-input-2'
 
 //import { app } from '../config/firebase-config';
 import toast, { Toaster } from 'react-hot-toast';
-import {emailValidator} from '../utils/validators';
+import {requiredValidator,emailValidator} from '../utils/validators';
 
 
 // import {GoogleAuthProvider, FacebookAuthProvider, signInWithPopup} from 'firebase/auth';
@@ -51,9 +51,11 @@ const [signupLoading,setSignupLoading] = useState(false);
 
 const notifysignup = () => toast.success('Signed Up successfully!');
 const notifylogin = () => toast.success('Logged in successfully!');
+const notifyuseremailexists = () => toast.error('Email Already Exists! Please use another!!');
 
 const [email, setEmail] = useState({value:'',error:''});
 const [password,setPassword] = useState({value:'',error:''});
+const [name,setName] = useState({value:'',error:''});
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -70,10 +72,14 @@ const signup = () => {
 
 
 const emailError = emailValidator(email.value);
-//const mplaceError = requiredValidator(mplace.value);
+const nameError = requiredValidator(name.value);
+const passwordError = requiredValidator(password.value);
 
-   if (emailError) {
+   if (emailError || nameError || passwordError) {
+      setName({ ...name, error: nameError });
+      setPassword({ ...password, error: passwordError });
       setEmail({ ...email, error: emailError });
+
   //    setMPlace({ ...mplace, error: mplaceError });
     //  setTermAdding(false);
       return false;
@@ -82,21 +88,127 @@ const emailError = emailValidator(email.value);
 // check for email before creating account
 
 
+
+
+
+
+
+
+try {
+
+const body = {
+   "email": email.value,    
+};
+
+
+var formBody = [];
+for (var key in body) {
+   var encodedKey = encodeURIComponent(key);
+   var encodedValue = encodeURIComponent(body[key]);
+   formBody.push(encodedKey + '=' + encodedValue);
+}
+formBody = formBody.join('&');
+
+fetch('http://localhost:5000/checkEmailExists', {
+
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      } ,
+   body:formBody     
+}).then((resp) => {
+  resp.json().then((data) => {
+  
+//alert('datamess'+data.message);
+
+if (data.message==="email can be used") {
+
+
+
   createUserWithEmailAndPassword(fauth, email.value, password.value)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    alert(user);
+    alert(JSON.stringify(user));
+
+// create user in our system 
+
+
+// backend-incio.onrender.com
+
+
+const body = {
+   "name": name.value, 
+   "email": email.value, 
+   "password": password.value,
+   "fireb_uid": user.uid,   
+};
+
+
+console.log('mmbody==',body);
+
+var formBody = [];
+for (var key in body) {
+   var encodedKey = encodeURIComponent(key);
+   var encodedValue = encodeURIComponent(body[key]);
+   formBody.push(encodedKey + '=' + encodedValue);
+}
+formBody = formBody.join('&');
+
+
+
+try{
+  fetch('http://localhost:5000/createUser', {
+
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      } ,
+   body:formBody     
+}).then((resp) => {
+  resp.json().then((data) => {
+  let adata = data;
+
     notifysignup();
     setSignupLoading(false);
+
+console.log('adata=',adata);
       navigate("/dashboard",'refresh');
+
+     });
+});
+
+
+} catch(e) { console.log('caught err'+e.message); }
+
+
+
+
+// now proceed user to dashboard
+
     // ...
   })
   .catch((error) => {
     const errorCode = error.code;
+
     const errorMessage = error.message;
+
+    console.log('trycatcherror::'+errorCode+'msg=='+errorMessage);
     // ..
   });
+
+
+  }
+else {
+   notifyuseremailexists();
+}
+   });
+});
+
+} catch(e) { console.log('caught signup err'+e.message); }
+
+
+
 
 
   }
@@ -148,7 +260,24 @@ return (
            
               <Box sx={{mx:'auto',backgroundColor:'white',p:2,m:1,width:330,alignItems:'center',alignSelf:'center',justifyContent:'center'}}>
 
+
 <Box sx={{width:'100%'}}>
+              <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
+
+              Name</Typography>
+             <InputBase
+                required
+                sx={{height:40,width:'100%' ,color:'black', fontSize:14,fontFamily:'AeonikBold',backgroundColor:'#f2f2f2'}}
+                size="small"
+                type="text"
+                value={name.value}
+                fullWidth                
+                onChange={(e) => { setName({value:e.target.value,error:''}) }}                              
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(name.error)}</span>
+</Box>
+
+
+<Box sx={{width:'100%',marginTop:3}}>
               <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
 
               Email</Typography>
@@ -160,7 +289,7 @@ return (
                 value={email.value}
                 fullWidth                
                 onChange={(e) => { setEmail({value:e.target.value,error:''}) }}                              
-              /> <span color="red">{(email.error)}</span>
+              /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(email.error)}</span>
 </Box>
 <Box sx={{marginTop:3}}>
            <Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>
@@ -194,7 +323,7 @@ return (
                onClick={() => {setSignupLoading(true);signup();}}
                 type="submit"
                 variant="contained"
-                sx={{"&:hover":{backgroundColor:'#000'},textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',width:'60%',fontFamily:'AeonikRegular',backgroundColor: '#9249F4'}}
+                sx={{boxShadow:'none',"&:hover":{backgroundColor:'#000',color:'#fff'},color:'#000',fontWeight:'bold',width:130,textTransform:'none', mt:3,mx:'auto',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',fontFamily:'AeonikRegular',backgroundColor: '#f2f2f2'}}
               >
                 Sign Up{ signupLoading && <CircularProgress size="small" color="info"/> }
               </Button></Box>
@@ -202,9 +331,27 @@ return (
 
  <Box elevation={1} sx={{width:330,p:2,m:1,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',alignSelf:'center',flexDirection:'column'}}>
           <Typography style={{fontSize:13,fontFamily:'AeonikBold',marginTop:-10,marginBottom:10}}>or</Typography>
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/google-login.png')} style={{width:350}}/></Box>
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/apple-login.png')} style={{width:350}} /> </Box>
-<Box onClick={() => signInWithGoogle()}><img src={require('../assets/images/linkedin-login.png')} style={{width:350}} /> </Box>
+
+
+
+<Box onClick={() => signInWithGoogle()} sx={{display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/google.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with Google</Typography>
+
+</Box>
+
+<Box onClick={() => signInWithGoogle()} sx={{marginTop:-3,display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/appleicon.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with Apple</Typography>
+
+</Box>
+
+
+<Box onClick={() => signInWithGoogle()} sx={{marginTop:-3,display:'flex',height:50,marginLeft:-5,marginRight:-5,width:330,marginBottom:5,backgroundColor:'#f2f2f2',alignItems:'center'}}>
+<img src={require('../assets/images/linkedin.png')} style={{marginLeft:10,width:30,height:30}}/>
+<Typography sx={{fontSize:13,fontFamily:'AeonikBold'}}>&emsp;Log In with LinkedIn</Typography>
+
+</Box>
 
 
 

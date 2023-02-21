@@ -684,7 +684,7 @@ try{
               <Button aria-label="custom-btn"
                   onClick={() => getGMeetLink()}                  
                   sx={{
-                    width: 150,
+                    width: 250,
                     height: 30,
                     zIndex:99,
                     marginRight:3,
@@ -692,7 +692,7 @@ try{
                     alignSelf: "center",
                     color: "#000",
                     backgroundColor:"#f2f2f2",
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: "AeonikBold",
                     textTransform: "none",                                   
                     "&:hover":{backgroundColor:'black',color:'#fff'}

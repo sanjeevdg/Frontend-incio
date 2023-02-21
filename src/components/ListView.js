@@ -203,6 +203,10 @@ TablePaginationActions.propTypes = {
 };
 
 
+
+
+
+
 function Row(props) {
   const { row } = props;
 
@@ -262,6 +266,89 @@ console.log('adata=',adata);
 
 },[]);
 
+const getGMeetLink = () => {
+
+
+console.log('mstr'+mstarttr);
+var dmstr = new Date(mstarttr);
+
+var getYear = dmstr.toLocaleString("default", { year: "numeric" });
+var getMonth = dmstr.toLocaleString("default", { month: "2-digit" });
+var getDay = dmstr.toLocaleString("default", { day: "2-digit" });
+
+
+var dateFormatted = getYear + "-" + getMonth + "-" + getDay;
+
+var tmstr = dmstr.toTimeString();
+
+var timeFormatted = tmstr.split(' ')[0];
+
+console.log('frmatted::'+dateFormatted);
+//var tgmsdt = dmstr.getFullYear()+"-"+(dmstr.getMonth()+1)+"-"+ dmstr.getDate(); 
+console.log('mod2date::'+timeFormatted);
+//gmstart.toLocaleDateString(); 
+//gmstm = '17:30';
+
+
+const body = {
+   "event_id":row.id,
+   "name": nametr.value, 
+   "location": locationtr.value, 
+   "description": descriptiontr.value,
+   "gmdate": dateFormatted,
+   "gmtime":timeFormatted   
+};
+
+console.log('mmbody==',body);
+
+var formBody = [];
+for (var key in body) {
+   var encodedKey = encodeURIComponent(key);
+   var encodedValue = encodeURIComponent(body[key]);
+   formBody.push(encodedKey + '=' + encodedValue);
+}
+formBody = formBody.join('&');
+// curl -d "formname=test1&displayname=est1" -X POST https://710d-2409-4060-1e-b158-1d34-fc03-ff6d-1ef2.ngrok.io/createNewForm
+// backend-incio.onrender.com
+
+try{
+  fetch(`https://backend-incio.onrender.com/preinit/`, {
+   method: 'POST', 
+   headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',              
+      },
+   body:formBody   
+}).then((resp) => {
+  resp.json().then((data) => {
+   // setIsLoading(false);
+   //alert(JSON.stringify(data));
+
+//alert('retdt=='+data);
+
+window.open('https://backend-incio.onrender.com/auth/google/');
+
+
+
+
+
+//   alert('retdata=='+JSON.stringify(data))
+   // notifyediteventsuccess();
+   //setTermAdding2(false);
+ //  setTimeout(() => { navigate(0);},1000);
+//alert('success');
+//window.reload();
+    
+  //  }
+  //  )
+
+  
+
+})
+})} catch(e) { alert('caught err'+e.message); }
+
+
+
+};
 
 function editEventTr() {
 
@@ -592,7 +679,31 @@ try{
               /> <span style={{float:'left',color:"#FF3B30",fontSize:12, fontFamily:'AeonikBold'}}>{(uniquelinktr.error)}</span>
 </Box>
 
+<Box sx={{position:'relative'}}>
 
+              <Button aria-label="custom-btn"
+                  onClick={() => getGMeetLink()}                  
+                  sx={{
+                    width: 150,
+                    height: 30,
+                    zIndex:99,
+                    marginRight:3,
+                    borderRadius: 6,
+                    alignSelf: "center",
+                    color: "#000",
+                    backgroundColor:"#f2f2f2",
+                    fontSize: 14,
+                    fontFamily: "AeonikBold",
+                    textTransform: "none",                                   
+                    "&:hover":{backgroundColor:'black',color:'#fff'}
+                  }}
+                >
+                Get Google meet link
+                </Button>
+
+
+
+</Box>
 
 
 
